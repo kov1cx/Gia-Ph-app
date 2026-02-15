@@ -10,45 +10,48 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Midnight Deep Theme - Dark */
-            --bg-dark: #020617;
-            --glass-bg: rgba(15, 23, 42, 0.4);
+            /* Midnight Deep Theme - Dark (Giữ màu tối của Splash) */
+            --bg-page: #020617;
+            --glass-bg: rgba(15, 23, 42, 0.6);
             --glass-border: rgba(255, 255, 255, 0.08);
-            --bloom-blue: rgba(59, 130, 246, 0.3);
-            --bloom-pink: rgba(236, 72, 153, 0.3);
+            --bloom-blue: rgba(59, 130, 246, 0.4);
+            --bloom-pink: rgba(236, 72, 153, 0.4);
             --text-main: #f1f5f9;
             --text-muted: #94a3b8;
+            --line-color: rgba(255, 255, 255, 0.1);
         }
 
         .light-mode {
-            --bg-dark: #f8fafc;
-            --glass-bg: rgba(255, 255, 255, 0.85);
-            --glass-border: rgba(0, 0, 0, 0.1);
-            --bloom-blue: rgba(59, 130, 246, 0.15);
-            --bloom-pink: rgba(236, 72, 153, 0.15);
-            --text-main: #0f172a;
-            --text-muted: #475569;
+            /* Theme Sáng - Tăng độ tương phản */
+            --bg-page: #f1f5f9; /* Xám xanh rất nhạt để đỡ chói mắt hơn trắng tinh */
+            --glass-bg: rgba(255, 255, 255, 0.92);
+            --glass-border: rgba(0, 0, 0, 0.15);
+            --bloom-blue: rgba(37, 99, 235, 0.15);
+            --bloom-pink: rgba(219, 39, 119, 0.15);
+            --text-main: #0f172a; /* Slate-950: Gần như đen */
+            --text-muted: #475569; /* Slate-600 */
+            --line-color: rgba(0, 0, 0, 0.15);
         }
 
         body {
             font-family: 'Inter', sans-serif;
             margin: 0;
             padding: 0;
-            transition: background-color 0.5s ease, color 0.5s ease;
-            background-color: var(--bg-dark);
+            transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1), color 0.5s ease;
+            background-color: var(--bg-page);
             color: var(--text-main);
         }
 
         .glass {
             background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
             border: 1px solid var(--glass-border);
-            transition: background 0.5s ease, border 0.5s ease;
+            transition: all 0.5s ease;
         }
 
         .light-mode .glass {
-            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.08);
         }
 
         /* Bloom Effects */
@@ -59,10 +62,10 @@
             box-shadow: 0 0 25px -5px var(--bloom-pink);
         }
         .bloom-soft {
-            box-shadow: 0 0 40px -10px rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 40px -10px rgba(0, 0, 0, 0.05);
         }
-        .light-mode .bloom-soft {
-            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.05);
+        .dark .bloom-soft {
+            box-shadow: 0 0 40px -10px rgba(255, 255, 255, 0.05);
         }
 
         .font-display {
@@ -84,26 +87,25 @@
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         .tree-node:hover {
-            transform: translateY(-8px) scale(1.03);
+            transform: translateY(-8px) scale(1.02);
             border-color: rgba(59, 130, 246, 0.6);
-            box-shadow: 0 15px 45px -10px var(--bloom-blue);
+            box-shadow: 0 20px 50px -15px var(--bloom-blue);
         }
 
         /* Tối ưu scrollbar */
-        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
-        .light-mode ::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.1); }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(59, 130, 246, 0.3); }
+        ::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.1); border-radius: 10px; }
+        body:not(.light-mode) ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(59, 130, 246, 0.4); }
 
-        /* Animation cho các phần tử */
         @keyframes subtle-float {
             0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-15px); }
             100% { transform: translateY(0px); }
         }
         .float-anim {
-            animation: subtle-float 6s ease-in-out infinite;
+            animation: subtle-float 8s ease-in-out infinite;
         }
     </style>
     <script type="importmap">
