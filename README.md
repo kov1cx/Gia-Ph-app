@@ -1,20 +1,63 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# 🌳 Gia Phả Số - Digital Genealogy
 
-# Run and deploy your AI Studio app
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Platform](https://img.shields.io/badge/platform-Web-orange.svg)]()
+[![Style](https://img.shields.io/badge/style-Glassmorphism-9cf)]()
+[![Tech](https://img.shields.io/badge/built%20with-HTML5%20%7C%20JS-yellow)]()
 
-This contains everything you need to run your app locally.
-
-View your app in AI Studio: https://ai.studio/apps/drive/1s9zvEl38Vr8VQHkxkH8pEGlK9zIlJ1Ki
-
-## Run Locally
-
-**Prerequisites:**  Node.js
+> Một giải pháp tạo lập gia phả dòng họ hiện đại, bảo mật và thẩm mỹ ngay trên trình duyệt web. Biến file Excel khô khan thành cây gia phả sống động.
+<img width="2553" height="1262" alt="image" src="https://github.com/user-attachments/assets/8308f9ba-0269-43b3-9f37-c688a1d68109" />
 
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## ✨ Tính năng nổi bật (Key Features)
+
+* **🎨 Giao diện Glassmorphism:** Thiết kế kính mờ sang trọng, độ tương phản cao, hỗ trợ Dark Mode giúp tôn vinh sự trang trọng.
+* **🚀 Serverless & Private:** Chạy trực tiếp trên trình duyệt (Client-side). Dữ liệu nằm trong túi bạn, không gửi lên máy chủ lạ.
+* **📂 Excel Import:** Tự động đọc và phân tích file Excel (`.xlsx`) để dựng cây gia phả tức thì.
+* **🔗 Auto-Link Logic:** Thuật toán tự động nối dây quan hệ huyết thống dựa trên `ID` và `Parent_ID`.
+* **🖨️ Print Ready:** Chế độ in ấn thông minh, tự động chuyển đổi sang khổ giấy A4 để đóng thành sách.
+* **🔍 Interactive:** Phóng to, thu nhỏ, kéo thả cây gia phả mượt mà.
+
+## 🛠️ Công nghệ sử dụng
+
+* **Core:** HTML5, CSS3 (Variables, Flexbox, Grid).
+* **Logic:** Vanilla JavaScript (ES6+).
+* **Library:** [SheetJS (xlsx)](https://sheetjs.com/) để xử lý dữ liệu Excel.
+* **Visualization:** CSS Pseudo-elements vẽ sơ đồ cây (nhẹ hơn Canvas/SVG).
+
+## 📖 Hướng dẫn sử dụng (How to use)
+
+Bạn không cần cài đặt Node.js hay Python. Chỉ cần làm theo 2 bước:
+
+1.  Tải file `index.html` về máy.
+2.  Mở file bằng trình duyệt (Chrome, Edge, Safari...).
+3.  Tải file Excel mẫu lên và trải nghiệm.
+
+### 📝 Cấu trúc file Excel
+
+Để ứng dụng vẽ đúng cây, file Excel cần có các cột sau (tên cột không phân biệt hoa thường):
+
+| ID | Parent_ID | HoTen | NamSinh | NamMat | TieuSu |
+|:---|:---|:---|:---|:---|:---|
+| 1 | *(Trống)* | Nguyễn Văn A | 1920 | 1990 | Cụ Tổ |
+| 2 | 1 | Nguyễn Văn B | 1950 | - | Con cụ A |
+| 3 | 2 | Nguyễn Văn C | 1980 | - | Cháu cụ A |
+
+> **Lưu ý:** `Parent_ID` là ID của người cha. Người đứng đầu dòng họ để trống ô này.
+
+## 🤝 Đóng góp (Contributing)
+
+Mọi đóng góp đều được hoan nghênh! Nếu bạn muốn cải thiện thuật toán vẽ cây hoặc thêm giao diện mới:
+1.  Fork dự án này.
+2.  Tạo nhánh mới (`git checkout -b feature/AmazingFeature`).
+3.  Commit thay đổi (`git commit -m 'Add some AmazingFeature'`).
+4.  Push lên nhánh (`git push origin feature/AmazingFeature`).
+5.  Mở Pull Request.
+
+## 👤 Tác giả
+
+**kov1cx**
+* Github: [@kov1cx](https://github.com/kov1cx)
+
+---
+*Dự án này được xây dựng với niềm tự hào về cội nguồn.* ❤️
