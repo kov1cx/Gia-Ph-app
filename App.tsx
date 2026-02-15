@@ -25,9 +25,13 @@ const App: React.FC = () => {
   useEffect(() => {
     const body = document.body;
     if (isDarkMode) {
-      body.className = 'bg-slate-950 text-slate-100 transition-colors duration-500';
+      body.style.backgroundColor = '#020617';
+      body.classList.remove('light-mode', 'text-slate-900');
+      body.classList.add('text-slate-100');
     } else {
-      body.className = 'light-mode bg-slate-50 text-slate-900 transition-colors duration-500';
+      body.style.backgroundColor = '#f8fafc';
+      body.classList.add('light-mode', 'text-slate-900');
+      body.classList.remove('text-slate-100');
     }
   }, [isDarkMode]);
 
@@ -51,10 +55,11 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className={`min-h-screen flex flex-col relative overflow-x-hidden`}>
-      {/* Background Orbs */}
-      <div className="fixed top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-600/10 rounded-full blur-[120px] pointer-events-none" />
-      <div className="fixed bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-indigo-600/10 rounded-full blur-[120px] pointer-events-none" />
+    <div className="min-h-screen flex flex-col relative overflow-x-hidden">
+      {/* Dynamic Background Bloom Orbs */}
+      <div className="fixed top-[-15%] left-[-10%] w-[60%] h-[60%] bg-blue-600/15 rounded-full blur-[140px] pointer-events-none float-anim" />
+      <div className="fixed bottom-[-15%] right-[-10%] w-[60%] h-[60%] bg-indigo-800/15 rounded-full blur-[140px] pointer-events-none float-anim" style={{ animationDelay: '-3s' }} />
+      <div className="fixed top-[20%] right-[-5%] w-[30%] h-[30%] bg-purple-600/10 rounded-full blur-[100px] pointer-events-none float-anim" style={{ animationDelay: '-1.5s' }} />
 
       <Navbar 
         activeTab={activeTab} 
@@ -65,7 +70,7 @@ const App: React.FC = () => {
         toggleTheme={() => setIsDarkMode(!isDarkMode)}
       />
 
-      <main className="flex-grow container mx-auto px-4 py-6 md:py-10 relative z-10">
+      <main className="flex-grow container mx-auto px-4 py-8 md:py-12 relative z-10">
         <div className="no-print">
           {activeTab === 'list' && <ListView members={members} onSelect={setSelectedMember} />}
           {activeTab === 'tree' && <TreeView members={members} onSelect={setSelectedMember} />}
@@ -94,10 +99,13 @@ const App: React.FC = () => {
         />
       )}
 
-      <footer className="no-print p-6 text-center border-t border-white/5 glass bg-transparent mt-auto">
+      <footer className="no-print p-8 text-center border-t border-white/5 glass bg-transparent mt-auto">
         <div className="flex flex-col items-center gap-2">
-          <p className="text-slate-500 text-xs tracking-widest uppercase">
-            © 2024 Gia Phả Dòng Họ • created by kov1cx
+          <p className="text-slate-500 text-[10px] tracking-[0.4em] uppercase font-medium opacity-60">
+            GenHeritage System • Digital Clan Records
+          </p>
+          <p className="text-slate-600 text-[9px] uppercase tracking-widest mt-1">
+            Created by kov1cx
           </p>
         </div>
       </footer>

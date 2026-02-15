@@ -10,29 +10,59 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --glass-bg: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --text-main: #f8fafc;
+            /* Midnight Deep Theme - Dark */
+            --bg-dark: #020617;
+            --glass-bg: rgba(15, 23, 42, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --bloom-blue: rgba(59, 130, 246, 0.3);
+            --bloom-pink: rgba(236, 72, 153, 0.3);
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
         }
 
         .light-mode {
-            --glass-bg: rgba(255, 255, 255, 0.6);
+            --bg-dark: #f8fafc;
+            --glass-bg: rgba(255, 255, 255, 0.85);
             --glass-border: rgba(0, 0, 0, 0.1);
+            --bloom-blue: rgba(59, 130, 246, 0.15);
+            --bloom-pink: rgba(236, 72, 153, 0.15);
             --text-main: #0f172a;
+            --text-muted: #475569;
         }
 
         body {
             font-family: 'Inter', sans-serif;
             margin: 0;
             padding: 0;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            transition: background-color 0.5s ease, color 0.5s ease;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
         }
 
         .glass {
             background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
+            transition: background 0.5s ease, border 0.5s ease;
+        }
+
+        .light-mode .glass {
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Bloom Effects */
+        .bloom-blue {
+            box-shadow: 0 0 25px -5px var(--bloom-blue);
+        }
+        .bloom-pink {
+            box-shadow: 0 0 25px -5px var(--bloom-pink);
+        }
+        .bloom-soft {
+            box-shadow: 0 0 40px -10px rgba(255, 255, 255, 0.05);
+        }
+        .light-mode .bloom-soft {
+            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.05);
         }
 
         .font-display {
@@ -51,17 +81,30 @@
 
         .tree-node {
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         .tree-node:hover {
-            transform: translateY(-5px) scale(1.02);
-            border-color: rgba(59, 130, 246, 0.5);
+            transform: translateY(-8px) scale(1.03);
+            border-color: rgba(59, 130, 246, 0.6);
+            box-shadow: 0 15px 45px -10px var(--bloom-blue);
         }
 
-        /* Tối ưu scrollbar cho glassmorphism */
-        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        /* Tối ưu scrollbar */
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(155, 155, 155, 0.3); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
+        .light-mode ::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.1); }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(59, 130, 246, 0.3); }
+
+        /* Animation cho các phần tử */
+        @keyframes subtle-float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .float-anim {
+            animation: subtle-float 6s ease-in-out infinite;
+        }
     </style>
     <script type="importmap">
 {
@@ -75,7 +118,7 @@
 }
 </script>
 </head>
-<body class="bg-slate-950 text-slate-100">
+<body class="text-slate-100">
     <div id="root"></div>
     <script type="module" src="index.tsx"></script>
 </body>
