@@ -6,8 +6,7 @@
 [![Tech](https://img.shields.io/badge/built%20with-HTML5%20%7C%20JS-yellow)]()
 
 > Một giải pháp tạo lập gia phả dòng họ hiện đại, bảo mật và thẩm mỹ ngay trên trình duyệt web. Biến file Excel khô khan thành cây gia phả sống động.
-![<img width="2553" height="1262" alt="image" src="https://github.com/user-attachments/assets/8308f9ba-0269-43b3-9f37-c688a1d68109" />
-]
+<img width="2553" height="1262" alt="image" src="https://github.com/user-attachments/assets/8308f9ba-0269-43b3-9f37-c688a1d68109" />
 
 
 ## ✨ Tính năng nổi bật (Key Features)
