@@ -4,13 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gia Phả Dòng Họ</title>
+    <title>Gia Phả Số - Digital Genealogy</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Midnight Deep Theme - Dark (Giữ màu tối của Splash) */
+            /* Midnight Deep Theme - Dark */
             --bg-page: #020617;
             --glass-bg: rgba(15, 23, 42, 0.6);
             --glass-border: rgba(255, 255, 255, 0.08);
@@ -18,109 +18,83 @@
             --bloom-pink: rgba(236, 72, 153, 0.4);
             --text-main: #f1f5f9;
             --text-muted: #94a3b8;
-            --line-color: rgba(255, 255, 255, 0.1);
         }
 
         .light-mode {
-            /* Theme Sáng - Tăng độ tương phản */
-            --bg-page: #f1f5f9; /* Xám xanh rất nhạt để đỡ chói mắt hơn trắng tinh */
-            --glass-bg: rgba(255, 255, 255, 0.92);
-            --glass-border: rgba(0, 0, 0, 0.15);
-            --bloom-blue: rgba(37, 99, 235, 0.15);
-            --bloom-pink: rgba(219, 39, 119, 0.15);
-            --text-main: #0f172a; /* Slate-950: Gần như đen */
-            --text-muted: #475569; /* Slate-600 */
-            --line-color: rgba(0, 0, 0, 0.15);
+            /* High Contrast Theme - Light */
+            --bg-page: #f8fafc;
+            --glass-bg: rgba(255, 255, 255, 0.95);
+            --glass-border: rgba(15, 23, 42, 0.15);
+            --bloom-blue: rgba(37, 99, 235, 0.1);
+            --bloom-pink: rgba(219, 39, 119, 0.1);
+            --text-main: #020617; /* Slate-950 cho độ tương phản tối đa */
+            --text-muted: #475569;
         }
 
         body {
             font-family: 'Inter', sans-serif;
             margin: 0;
             padding: 0;
-            transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1), color 0.5s ease;
+            transition: background-color 0.5s ease, color 0.5s ease;
             background-color: var(--bg-page);
             color: var(--text-main);
         }
 
         .glass {
             background: var(--glass-bg);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
-            transition: all 0.5s ease;
         }
 
-        .light-mode .glass {
-            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.08);
+        .font-display { font-family: 'Playfair Display', serif; }
+
+        /* Tree View Drawing */
+        .tree-node {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .tree-node:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px -15px var(--bloom-blue);
         }
 
-        /* Bloom Effects */
-        .bloom-blue {
-            box-shadow: 0 0 25px -5px var(--bloom-blue);
-        }
-        .bloom-pink {
-            box-shadow: 0 0 25px -5px var(--bloom-pink);
-        }
-        .bloom-soft {
-            box-shadow: 0 0 40px -10px rgba(0, 0, 0, 0.05);
-        }
-        .dark .bloom-soft {
-            box-shadow: 0 0 40px -10px rgba(255, 255, 255, 0.05);
-        }
-
-        .font-display {
-            font-family: 'Playfair Display', serif;
-        }
-
+        /* Print Optimization */
         @media print {
-            @page { size: A4; margin: 10mm; }
+            @page { size: A4; margin: 15mm; }
             body { background: white !important; color: black !important; }
             .no-print { display: none !important; }
             .print-only { display: block !important; }
-            .glass { background: transparent !important; border: 1px solid #ddd !important; box-shadow: none !important; color: black !important; }
-            table { width: 100%; border-collapse: collapse; }
-            th, td { border: 1px solid #ddd; padding: 8px; color: black !important; }
+            .glass { background: transparent !important; border: 1px solid #000 !important; box-shadow: none !important; color: black !important; backdrop-filter: none !important; }
+            h1, h2, h3 { color: black !important; }
+            table { border: 1px solid #000 !important; }
+            th, td { border: 1px solid #000 !important; padding: 6px !important; color: black !important; }
         }
 
-        .tree-node {
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .tree-node:hover {
-            transform: translateY(-8px) scale(1.02);
-            border-color: rgba(59, 130, 246, 0.6);
-            box-shadow: 0 20px 50px -15px var(--bloom-blue);
-        }
-
-        /* Tối ưu scrollbar */
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.1); border-radius: 10px; }
-        body:not(.light-mode) ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(59, 130, 246, 0.4); }
+        ::-webkit-scrollbar-thumb { background: rgba(59, 130, 246, 0.2); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(59, 130, 246, 0.5); }
 
-        @keyframes subtle-float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
-            100% { transform: translateY(0px); }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
         }
-        .float-anim {
-            animation: subtle-float 8s ease-in-out infinite;
-        }
+        .animate-float { animation: float 10s ease-in-out infinite; }
     </style>
     <script type="importmap">
-{
-  "imports": {
-    "react": "https://esm.sh/react@^19.2.4",
-    "react-dom": "https://esm.sh/react-dom@^19.2.4",
-    "react-dom/client": "https://esm.sh/react-dom@^19.2.4/client",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-    "react/": "https://esm.sh/react@^19.2.4/"
-  }
-}
-</script>
+    {
+      "imports": {
+        "react": "https://esm.sh/react@^19.2.4",
+        "react-dom": "https://esm.sh/react-dom@^19.2.4",
+        "react-dom/client": "https://esm.sh/react-dom@^19.2.4/client",
+        "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+        "react/": "https://esm.sh/react@^19.2.4/"
+      }
+    }
+    </script>
 </head>
-<body class="text-slate-100">
+<body class="selection:bg-blue-500/30">
     <div id="root"></div>
     <script type="module" src="index.tsx"></script>
 </body>

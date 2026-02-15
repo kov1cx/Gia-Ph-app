@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import Splash from './components/Splash';
 import Navbar from './components/Navbar';
@@ -7,76 +8,96 @@ import DetailsModal from './components/DetailsModal';
 import ClanHistory from './components/ClanHistory';
 import { FamilyMember, TabType } from './types';
 
-const MOCK_DATA: FamilyMember[] = [
-  { id: '1', name: 'Nguyễn Văn Tổ', birthYear: '1850', deathDate: '15/03 âm lịch', parentId: null, spouse: 'Lê Thị Tổ', gender: 'Nam', description: 'Người khai sáng dòng họ.', rank: 'Đời thứ 1' },
-  { id: '2', name: 'Nguyễn Văn A', birthYear: '1880', deathDate: '10/10 âm lịch', parentId: '1', spouse: 'Lê Thị B', gender: 'Nam', rank: 'Đời thứ 2' },
-  { id: '3', name: 'Nguyễn Thị C', birthYear: '1885', deathDate: '', parentId: '1', spouse: 'Trần Văn D', gender: 'Nữ', rank: 'Đời thứ 2' },
-  { id: '4', name: 'Nguyễn Văn E', birthYear: '1910', deathDate: '', parentId: '2', spouse: 'Phạm Thị F', gender: 'Nam', rank: 'Đời thứ 3' }
-];
+const STORAGE_KEY = 'gen_heritage_data';
+const BIO_KEY = 'gen_heritage_bio';
 
 const App: React.FC = () => {
   const [isIntro, setIsIntro] = useState(true);
   const [activeTab, setActiveTab] = useState<TabType>('tree');
-  const [members, setMembers] = useState<FamilyMember[]>(MOCK_DATA);
+  const [members, setMembers] = useState<FamilyMember[]>([]);
   const [selectedMember, setSelectedMember] = useState<FamilyMember | null>(null);
   const [isDarkMode, setIsDarkMode] = useState(true);
-  const [clanBio, setClanBio] = useState<string>("Dòng họ chúng ta có truyền thống lâu đời, khởi nguồn từ vùng đất địa linh nhân kiệt. Trải qua nhiều thế hệ, con cháu luôn giữ gìn nền nếp gia phong, hiếu học và thành đạt. Bản gia phả số này nhằm ghi chép và lưu truyền công đức của tổ tiên cho muôn đời sau.");
+  const [clanBio, setClanBio] = useState<string>("");
+  const [isSaved, setIsSaved] = useState(true);
+
+  // Load data from LocalStorage on startup (Desktop/Offline behavior)
+  useEffect(() => {
+    const savedMembers = localStorage.getItem(STORAGE_KEY);
+    const savedBio = localStorage.getItem(BIO_KEY);
+    
+    if (savedMembers) {
+      setMembers(JSON.parse(savedMembers));
+    } else {
+      // Default demo data if empty
+      setMembers([
+        { id: '1', name: 'Nguyễn Văn Tổ', birthYear: '1850', deathDate: '15/03 âm lịch', parentId: null, spouse: 'Lê Thị Tổ', gender: 'Nam', rank: 'Đời thứ 1' },
+        { id: '2', name: 'Nguyễn Văn A', birthYear: '1880', deathDate: '10/10 âm lịch', parentId: '1', spouse: 'Trần Thị B', gender: 'Nam', rank: 'Đời thứ 2' }
+      ]);
+    }
+    
+    if (savedBio) {
+      setClanBio(savedBio);
+    } else {
+      setClanBio("Bản gia phả này là tâm huyết của con cháu nhằm lưu giữ cội nguồn dòng họ. Xin hãy trân trọng và bổ sung định kỳ.");
+    }
+  }, []);
+
+  // Sync to LocalStorage whenever data changes
+  useEffect(() => {
+    if (members.length > 0) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(members));
+      setIsSaved(true);
+    }
+  }, [members]);
+
+  useEffect(() => {
+    if (clanBio) {
+      localStorage.setItem(BIO_KEY, clanBio);
+      setIsSaved(true);
+    }
+  }, [clanBio]);
 
   useEffect(() => {
     const body = document.body;
     if (isDarkMode) {
-      body.style.backgroundColor = '#020617';
       body.classList.remove('light-mode');
-      body.classList.add('dark');
+      body.style.backgroundColor = '#020617';
     } else {
-      body.style.backgroundColor = '#f1f5f9';
       body.classList.add('light-mode');
-      body.classList.remove('dark');
+      body.style.backgroundColor = '#f8fafc';
     }
   }, [isDarkMode]);
 
   const handleExcelUpload = (data: FamilyMember[]) => {
-    if (data && data.length > 0) {
-      setMembers(data);
-    }
+    setMembers(data);
+    setIsSaved(false);
+  };
+
+  const handleUpdateBio = (newBio: string) => {
+    setClanBio(newBio);
+    setIsSaved(false);
   };
 
   const handleDownloadSample = () => {
-    try {
-      const XLSX = (window as any).XLSX;
-      if (!XLSX) return;
-      
-      const sampleData = [
-        ["ID", "Parent_ID", "HoTen", "NamSinh", "NgayMat", "GioiTinh", "ThuBac", "VoChong", "GhiChu"],
-        ["1", "", "Nguyễn Văn Tổ", "1850", "15/03 âm lịch", "Nam", "Đời 1", "Lê Thị Tổ", "Người khai sáng"],
-        ["2", "1", "Nguyễn Văn A", "1880", "10/10 âm lịch", "Nam", "Đời 2", "Trần Thị B", "Trưởng chi"],
-        ["3", "1", "Nguyễn Thị C", "1885", "", "Nữ", "Đời 2", "Lý Văn D", "Thứ chi"],
-        ["4", "2", "Nguyễn Văn E", "1910", "", "Nam", "Đời 3", "", "Cháu đích tôn"]
-      ];
-
-      const ws = XLSX.utils.aoa_to_sheet(sampleData);
-      const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, "GiaPhaMau");
-      XLSX.writeFile(wb, "GiaPha_Mau_Release.xlsx");
-    } catch (err) {
-      console.error("Lỗi khi tạo file mẫu:", err);
-    }
+    const XLSX = (window as any).XLSX;
+    if (!XLSX) return;
+    const data = [
+      ["ID", "Parent_ID", "HoTen", "NamSinh", "NgayMat", "GioiTinh", "ThuBac", "VoChong", "GhiChu"],
+      ["1", "", "Nguyễn Văn Tổ", "1850", "15/03 âm lịch", "Nam", "Đời 1", "Lê Thị Tổ", "Cụ tổ khai sáng"],
+      ["2", "1", "Nguyễn Văn A", "1880", "10/10 âm lịch", "Nam", "Đời 2", "Trần Thị B", "Trưởng chi"]
+    ];
+    const ws = XLSX.utils.aoa_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "GiaPha");
+    XLSX.writeFile(wb, "Mau_Gia_Pha_Desktop.xlsx");
   };
 
-  const updateMember = (updatedMember: FamilyMember) => {
-    setMembers(prev => prev.map(m => m.id === updatedMember.id ? updatedMember : m));
-    setSelectedMember(updatedMember);
-  };
-
-  if (isIntro) {
-    return <Splash onEnter={() => setIsIntro(false)} />;
-  }
+  if (isIntro) return <Splash onEnter={() => setIsIntro(false)} />;
 
   return (
-    <div className="min-h-screen flex flex-col relative overflow-x-hidden">
-      {/* Background Orbs */}
-      <div className="fixed top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-600/10 rounded-full blur-[120px] pointer-events-none float-anim" />
-      <div className="fixed bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-indigo-800/10 rounded-full blur-[120px] pointer-events-none float-anim" style={{ animationDelay: '-4s' }} />
+    <div className="min-h-screen flex flex-col relative">
+      <div className="fixed top-[-20%] left-[-10%] w-[70%] h-[70%] bg-blue-600/5 rounded-full blur-[150px] pointer-events-none animate-float" />
+      <div className="fixed bottom-[-20%] right-[-10%] w-[70%] h-[70%] bg-indigo-600/5 rounded-full blur-[150px] pointer-events-none animate-float" style={{ animationDelay: '-5s' }} />
 
       <Navbar 
         activeTab={activeTab} 
@@ -86,52 +107,46 @@ const App: React.FC = () => {
         onDownloadSample={handleDownloadSample}
         isDarkMode={isDarkMode}
         toggleTheme={() => setIsDarkMode(!isDarkMode)}
+        isSaved={isSaved}
       />
 
-      <main className="flex-grow container mx-auto px-4 py-8 md:py-12 relative z-10">
+      <main className="flex-grow container mx-auto px-4 py-8 relative z-10">
         <div className="no-print">
           {activeTab === 'list' && <ListView members={members} onSelect={setSelectedMember} />}
           {activeTab === 'tree' && <TreeView members={members} onSelect={setSelectedMember} />}
-          {activeTab === 'history' && <ClanHistory biography={clanBio} onUpdate={setClanBio} />}
+          {activeTab === 'history' && <ClanHistory biography={clanBio} onUpdate={handleUpdateBio} />}
         </div>
 
-        {/* Print Layout */}
         <div className="hidden print-only">
-          <div className="text-center mb-12 border-b-4 border-black pb-6">
-            <h1 className="text-5xl font-display font-bold text-black uppercase tracking-tight">Gia Phả Dòng Họ</h1>
-            <p className="text-black/60 mt-3 italic text-lg">Tài liệu lưu trữ nội bộ gia tộc - Phiên bản in ấn</p>
+          <div className="text-center mb-16 border-b-8 border-double border-black pb-8">
+            <h1 className="text-6xl font-display font-bold uppercase">Gia Phả Dòng Họ</h1>
+            <p className="text-xl mt-4 italic">Tài liệu lưu trữ nội bộ</p>
           </div>
-          <div className="mb-12 p-10 border-2 border-black/20 rounded-2xl">
-            <h2 className="text-2xl font-bold mb-6 border-b border-black/10 pb-2">Tiểu sử dòng họ</h2>
-            <p className="text-base leading-relaxed whitespace-pre-wrap text-black">{clanBio}</p>
+          <div className="mb-12">
+            <h2 className="text-3xl font-bold mb-6">I. Tiểu sử dòng họ</h2>
+            <p className="text-lg leading-relaxed whitespace-pre-wrap">{clanBio}</p>
           </div>
-          <h2 className="text-2xl font-bold mb-6">Danh sách thành viên</h2>
-          <ListView members={members} onSelect={() => {}} />
+          <div className="mb-12">
+            <h2 className="text-3xl font-bold mb-6">II. Danh sách thành viên</h2>
+            <ListView members={members} onSelect={() => {}} />
+          </div>
         </div>
       </main>
 
       {selectedMember && (
         <DetailsModal 
           member={selectedMember} 
-          members={members}
+          members={members} 
           onClose={() => setSelectedMember(null)} 
-          onSave={updateMember}
+          onSave={(updated) => {
+            setMembers(prev => prev.map(m => m.id === updated.id ? updated : m));
+            setIsSaved(false);
+          }}
         />
       )}
 
-      <footer className="no-print p-10 text-center border-t border-black/5 dark:border-white/5 glass bg-transparent mt-auto">
-        <div className="flex flex-col items-center gap-2">
-          <p className="text-slate-500 dark:text-slate-400 text-[10px] tracking-[0.5em] uppercase font-black opacity-80">
-            GenHeritage v1.0 • Release Version
-          </p>
-          <div className="flex items-center gap-3 mt-1">
-            <span className="w-1 h-1 rounded-full bg-blue-500"></span>
-            <p className="text-slate-600 dark:text-slate-500 text-[9px] uppercase tracking-widest">
-              Digital Clan Records • Proudly built by kov1cx
-            </p>
-            <span className="w-1 h-1 rounded-full bg-blue-500"></span>
-          </div>
-        </div>
+      <footer className="no-print py-10 text-center opacity-50 text-[10px] uppercase tracking-[0.4em] font-black">
+        GenHeritage Offline Mode • Release v1.1
       </footer>
     </div>
   );

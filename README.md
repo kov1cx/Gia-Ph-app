@@ -1,63 +1,48 @@
-# 🌳 Gia Phả Số - Digital Genealogy
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Platform](https://img.shields.io/badge/platform-Web-orange.svg)]()
-[![Style](https://img.shields.io/badge/style-Glassmorphism-9cf)]()
-[![Tech](https://img.shields.io/badge/built%20with-HTML5%20%7C%20JS-yellow)]()
+# 🌳 Gia Phả Số - Digital Genealogy (Desktop Ready)
 
-> Một giải pháp tạo lập gia phả dòng họ hiện đại, bảo mật và thẩm mỹ ngay trên trình duyệt web. Biến file Excel khô khan thành cây gia phả sống động.
-<img width="2553" height="1262" alt="image" src="https://github.com/user-attachments/assets/8308f9ba-0269-43b3-9f37-c688a1d68109" />
+Bản cập nhật v1.1 hỗ trợ lưu trữ dữ liệu vĩnh viễn trên máy tính và sẵn sàng đóng gói thành ứng dụng Windows (.exe).
 
+## 🚀 Cách biến thành App Windows (.exe)
 
-## ✨ Tính năng nổi bật (Key Features)
+Nếu bạn muốn biến project này thành một file `.exe` chạy độc lập, hãy làm theo các bước sau:
 
-* **🎨 Giao diện Glassmorphism:** Thiết kế kính mờ sang trọng, độ tương phản cao, hỗ trợ Dark Mode giúp tôn vinh sự trang trọng.
-* **🚀 Serverless & Private:** Chạy trực tiếp trên trình duyệt (Client-side). Dữ liệu nằm trong túi bạn, không gửi lên máy chủ lạ.
-* **📂 Excel Import:** Tự động đọc và phân tích file Excel (`.xlsx`) để dựng cây gia phả tức thì.
-* **🔗 Auto-Link Logic:** Thuật toán tự động nối dây quan hệ huyết thống dựa trên `ID` và `Parent_ID`.
-* **🖨️ Print Ready:** Chế độ in ấn thông minh, tự động chuyển đổi sang khổ giấy A4 để đóng thành sách.
-* **🔍 Interactive:** Phóng to, thu nhỏ, kéo thả cây gia phả mượt mà.
+### Bước 1: Khởi tạo Project Electron
+Trong thư mục chứa code của bạn, chạy lệnh:
+```bash
+npm init -y
+npm install electron --save-dev
+```
 
-## 🛠️ Công nghệ sử dụng
+### Bước 2: Tạo file `main.js` (Cấu hình Electron)
+Tạo một file mới tên là `main.js` với nội dung sau:
+```javascript
+const { app, BrowserWindow } = require('electron')
+function createWindow () {
+  const win = new BrowserWindow({
+    width: 1200, height: 800,
+    icon: __dirname + '/icon.ico',
+    webPreferences: { nodeIntegration: true }
+  })
+  win.loadFile('index.html') // Load file HTML của bạn
+}
+app.whenReady().then(createWindow)
+```
 
-* **Core:** HTML5, CSS3 (Variables, Flexbox, Grid).
-* **Logic:** Vanilla JavaScript (ES6+).
-* **Library:** [SheetJS (xlsx)](https://sheetjs.com/) để xử lý dữ liệu Excel.
-* **Visualization:** CSS Pseudo-elements vẽ sơ đồ cây (nhẹ hơn Canvas/SVG).
+### Bước 3: Đóng gói thành EXE
+Sử dụng công cụ `electron-packager`:
+```bash
+npx electron-packager . GiaPhaSo --platform=win32 --arch=x64 --out=dist/
+```
 
-## 📖 Hướng dẫn sử dụng (How to use)
+## 🛠️ Tính năng Offline (Mới)
+* **Auto-Save**: Mọi thay đổi về thành viên hoặc tiểu sử sẽ tự động được lưu vào `localStorage` của máy tính.
+* **No Internet Required**: Ứng dụng có thể mở và xem lại gia phả cũ ngay cả khi không có mạng (sau lần tải đầu tiên để trình duyệt cache các thư viện).
 
-Bạn không cần cài đặt Node.js hay Python. Chỉ cần làm theo 2 bước:
-
-1.  Tải file `index.html` về máy.
-2.  Mở file bằng trình duyệt (Chrome, Edge, Safari...).
-3.  Tải file Excel mẫu lên và trải nghiệm.
-
-### 📝 Cấu trúc file Excel
-
-Để ứng dụng vẽ đúng cây, file Excel cần có các cột sau (tên cột không phân biệt hoa thường):
-
-| ID | Parent_ID | HoTen | NamSinh | NamMat | TieuSu | GioiTinh | ThuBac | VoChong |
-|:---|:---|:---|:---|:---|:---|:---|:---|:---|
-| 1 | *(Trống)* | Nguyễn Văn A | 1920 | 1990 | Cụ Tổ | Nam | Đời 1 | Bà A |
-| 2 | 1 | Nguyễn Văn B | 1950 | - | Con cụ A | Nam | Đời 2 | Bà B |
-| 3 | 2 | Nguyễn Văn C | 1980 | - | Cháu cụ A | Nam | Đời 3 | - |
-
-> **Lưu ý:** `Parent_ID` là ID của người cha. Người đứng đầu dòng họ để trống ô này.
-
-## 🤝 Đóng góp (Contributing)
-
-Mọi đóng góp đều được hoan nghênh! Nếu bạn muốn cải thiện thuật toán vẽ cây hoặc thêm giao diện mới:
-1.  Fork dự án này.
-2.  Tạo nhánh mới (`git checkout -b feature/AmazingFeature`).
-3.  Commit thay đổi (`git commit -m 'Add some AmazingFeature'`).
-4.  Push lên nhánh (`git push origin feature/AmazingFeature`).
-5.  Mở Pull Request.
-
-## 👤 Tác giả
-
-**kov1cx**
-* Github: [@kov1cx](https://github.com/kov1cx)
+## 📝 Lưu ý quan trọng
+Để app hoạt động **100% offline không cần mạng lần đầu**, bạn nên:
+1. Tải file `xlsx.full.min.js` từ CDN về thư mục gốc.
+2. Sửa lại thẻ `<script src="...">` trong `index.html` để trỏ vào file nội bộ thay vì link web.
 
 ---
-*Dự án này được xây dựng với niềm tự hào về cội nguồn.* ❤️
+*Phát triển bởi kov1cx • Tự hào cội nguồn Việt.* ❤️

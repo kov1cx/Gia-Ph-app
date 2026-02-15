@@ -1,5 +1,5 @@
 {
-  "name": "Gia Phả Họ Nguyễn",
-  "description": "Ứng dụng quản lý gia phả hiện đại với giao diện Glassmorphism, hỗ trợ nhập liệu từ Excel và xem sơ đồ cây tương tác.",
+  "name": "Gia Phả Số v1.1 (Offline Edition)",
+  "description": "Ứng dụng quản lý gia phả chuyên nghiệp, hỗ trợ lưu trữ cục bộ và đóng gói Desktop EXE.",
   "requestFramePermissions": []
 }
