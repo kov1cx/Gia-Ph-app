@@ -37,11 +37,11 @@ Bạn không cần cài đặt Node.js hay Python. Chỉ cần làm theo 2 bư�
 
 Để ứng dụng vẽ đúng cây, file Excel cần có các cột sau (tên cột không phân biệt hoa thường):
 
-| ID | Parent_ID | HoTen | NamSinh | NamMat | TieuSu |
-|:---|:---|:---|:---|:---|:---|
-| 1 | *(Trống)* | Nguyễn Văn A | 1920 | 1990 | Cụ Tổ |
-| 2 | 1 | Nguyễn Văn B | 1950 | - | Con cụ A |
-| 3 | 2 | Nguyễn Văn C | 1980 | - | Cháu cụ A |
+| ID | Parent_ID | HoTen | NamSinh | NamMat | TieuSu | GioiTinh | ThuBac | VoChong |
+|:---|:---|:---|:---|:---|:---|:---|:---|:---|
+| 1 | *(Trống)* | Nguyễn Văn A | 1920 | 1990 | Cụ Tổ | Nam | Đời 1 | Bà A |
+| 2 | 1 | Nguyễn Văn B | 1950 | - | Con cụ A | Nam | Đời 2 | Bà B |
+| 3 | 2 | Nguyễn Văn C | 1980 | - | Cháu cụ A | Nam | Đời 3 | - |
 
 > **Lưu ý:** `Parent_ID` là ID của người cha. Người đứng đầu dòng họ để trống ô này.
 

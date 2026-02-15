@@ -1,4 +1,3 @@
-
 import React, { useRef } from 'react';
 import { TabType, FamilyMember } from '../types';
 
@@ -7,11 +6,14 @@ interface NavbarProps {
   onTabChange: (tab: TabType) => void;
   onUpload: (data: FamilyMember[]) => void;
   onExport: () => void;
+  onDownloadSample: () => void;
   isDarkMode: boolean;
   toggleTheme: () => void;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ activeTab, onTabChange, onUpload, onExport, isDarkMode, toggleTheme }) => {
+const Navbar: React.FC<NavbarProps> = ({ 
+  activeTab, onTabChange, onUpload, onExport, onDownloadSample, isDarkMode, toggleTheme 
+}) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const normalizeKey = (key: string) => {
@@ -62,7 +64,6 @@ const Navbar: React.FC<NavbarProps> = ({ activeTab, onTabChange, onUpload, onExp
         });
 
         onUpload(members);
-        alert(`Đã nhập thành công ${members.length} thành viên.`);
       } catch (err) {
         alert("Có lỗi khi đọc file Excel.");
       }
@@ -71,30 +72,35 @@ const Navbar: React.FC<NavbarProps> = ({ activeTab, onTabChange, onUpload, onExp
   };
 
   return (
-    <nav className="no-print sticky top-0 z-50 w-full glass px-4 py-3 transition-all border-b border-white/10 shadow-lg">
-      <div className="container mx-auto flex flex-col lg:flex-row items-center justify-between gap-4">
-        <div className="flex items-center gap-3 self-start lg:self-center">
-          <div className="w-10 h-10 glass rounded-xl flex items-center justify-center border border-blue-500/30 text-blue-500 shadow-lg bg-blue-500/5">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5S19.832 5.477 21 6.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+    <nav className="no-print sticky top-0 z-50 w-full glass px-6 py-4 transition-all border-b border-black/5 dark:border-white/10 shadow-xl bg-white/10 dark:bg-black/10">
+      <div className="container mx-auto flex flex-col lg:flex-row items-center justify-between gap-6">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 glass rounded-2xl flex items-center justify-center border-2 border-blue-500/40 text-blue-600 dark:text-blue-400 shadow-xl bg-blue-500/5">
+            <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5S19.832 5.477 21 6.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
             </svg>
           </div>
           <div>
-            <h2 className="text-lg font-bold font-display tracking-wide uppercase">Gia Phả Dòng Họ</h2>
+            <h2 className="text-xl font-black font-display tracking-tight uppercase text-slate-900 dark:text-white leading-tight">Gia Phả Số</h2>
+            <p className="text-[8px] uppercase tracking-[0.3em] font-black text-blue-600/60 dark:text-blue-400/60">Heritage Records</p>
           </div>
         </div>
 
-        <div className="flex items-center glass p-1 rounded-2xl border border-white/10 w-full md:w-auto overflow-hidden bg-slate-900/20">
-          <button onClick={() => onTabChange('tree')} className={`flex-1 md:flex-none px-4 py-2 rounded-xl text-[10px] font-bold uppercase transition-all ${activeTab === 'tree' ? 'bg-blue-600 text-white shadow-xl' : 'text-slate-500'}`}>Cây</button>
-          <button onClick={() => onTabChange('list')} className={`flex-1 md:flex-none px-4 py-2 rounded-xl text-[10px] font-bold uppercase transition-all ${activeTab === 'list' ? 'bg-blue-600 text-white shadow-xl' : 'text-slate-500'}`}>Danh sách</button>
-          <button onClick={() => onTabChange('history')} className={`flex-1 md:flex-none px-4 py-2 rounded-xl text-[10px] font-bold uppercase transition-all ${activeTab === 'history' ? 'bg-blue-600 text-white shadow-xl' : 'text-slate-500'}`}>Tiểu sử</button>
+        <div className="flex items-center glass p-1.5 rounded-2xl border border-black/10 dark:border-white/10 w-full md:w-auto bg-slate-200/50 dark:bg-slate-900/40">
+          <button onClick={() => onTabChange('tree')} className={`flex-1 md:flex-none px-6 py-2.5 rounded-xl text-[10px] font-black uppercase transition-all tracking-widest ${activeTab === 'tree' ? 'bg-blue-600 text-white shadow-xl scale-105' : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'}`}>Cây</button>
+          <button onClick={() => onTabChange('list')} className={`flex-1 md:flex-none px-6 py-2.5 rounded-xl text-[10px] font-black uppercase transition-all tracking-widest ${activeTab === 'list' ? 'bg-blue-600 text-white shadow-xl scale-105' : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'}`}>Danh sách</button>
+          <button onClick={() => onTabChange('history')} className={`flex-1 md:flex-none px-6 py-2.5 rounded-xl text-[10px] font-black uppercase transition-all tracking-widest ${activeTab === 'history' ? 'bg-blue-600 text-white shadow-xl scale-105' : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'}`}>Tiểu sử</button>
         </div>
 
-        <div className="flex items-center gap-2 w-full md:w-auto justify-end">
-          <button onClick={toggleTheme} className="p-2.5 glass rounded-xl border border-white/10 bg-white/5">{isDarkMode ? '🌙' : '☀️'}</button>
+        <div className="flex items-center gap-3 w-full md:w-auto justify-end">
+          <button onClick={toggleTheme} className="p-3 glass rounded-2xl border border-black/10 dark:border-white/10 bg-white/10 dark:bg-black/20 hover:scale-110 transition-transform">{isDarkMode ? '🌙' : '☀️'}</button>
           <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" accept=".xlsx, .xls" />
-          <button onClick={() => fileInputRef.current?.click()} className="px-4 py-2 glass rounded-xl border border-white/10 text-[10px] font-bold uppercase bg-white/5">Nhập Excel</button>
-          <button onClick={onExport} className="px-4 py-2 bg-blue-600 text-white rounded-xl text-[10px] font-bold uppercase">Xuất PDF</button>
+          
+          <button onClick={onDownloadSample} className="px-5 py-3 glass rounded-2xl border border-black/10 dark:border-white/10 text-[10px] font-black uppercase tracking-widest bg-white/20 dark:bg-black/20 hover:bg-amber-500/10 hover:border-amber-500/30 transition-all">Tải Mẫu</button>
+          
+          <button onClick={() => fileInputRef.current?.click()} className="px-5 py-3 glass rounded-2xl border border-black/10 dark:border-white/10 text-[10px] font-black uppercase tracking-widest bg-white/20 dark:bg-black/20 hover:bg-blue-600/10 hover:border-blue-600 transition-all">Nhập Excel</button>
+          
+          <button onClick={onExport} className="px-6 py-3 bg-gradient-to-r from-blue-700 to-indigo-700 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-xl shadow-blue-500/20 active:scale-95 transition-all">Xuất PDF</button>
         </div>
       </div>
     </nav>
