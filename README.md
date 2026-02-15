@@ -7,8 +7,9 @@
 
 > Một giải pháp tạo lập gia phả dòng họ hiện đại, bảo mật và thẩm mỹ ngay trên trình duyệt web. Biến file Excel khô khan thành cây gia phả sống động.
 
-![Demo App](https://via.placeholder.com/800x400?text=Thay+Anh+Demo+Cua+Ban+Vao+Day)
-*(Hãy thay đường link trên bằng ảnh chụp màn hình hoặc GIF demo ứng dụng của bạn)*
+![Demo App](<img width="2017" height="1111" alt="image" src="https://github.com/user-attachments/assets/35d34d7b-6343-4338-848a-d871fa776fd1" />
+)
+
 
 ## ✨ Tính năng nổi bật (Key Features)
 
