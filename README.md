@@ -46,16 +46,6 @@ Bạn không cần cài đặt Node.js hay Python. Chỉ cần làm theo 2 bư�
 
 > **Lưu ý:** `Parent_ID` là ID của người cha. Người đứng đầu dòng họ để trống ô này.
 
-## 📸 Screenshots
-
-| Giao diện Intro | Sơ đồ cây (Tree View) |
-|:---:|:---:|
-| ![Intro](https://via.placeholder.com/400x200?text=Intro) | ![Tree](https://via.placeholder.com/400x200?text=Tree) |
-
-| Chế độ in (Print Mode) | Mobile Responsive |
-|:---:|:---:|
-| ![Print](https://via.placeholder.com/400x200?text=Print) | ![Mobile](https://via.placeholder.com/400x200?text=Mobile) |
-
 ## 🤝 Đóng góp (Contributing)
 
 Mọi đóng góp đều được hoan nghênh! Nếu bạn muốn cải thiện thuật toán vẽ cây hoặc thêm giao diện mới:
@@ -67,9 +57,8 @@ Mọi đóng góp đều được hoan nghênh! Nếu bạn muốn cải thiện
 
 ## 👤 Tác giả
 
-**[Tên của bạn]**
-* Website: [Link web của bạn nếu có]
-* Github: [@username](https://github.com/username)
+**kov1cx**
+* Github: [@kov1cx](https://github.com/kov1cx)
 
 ---
 *Dự án này được xây dựng với niềm tự hào về cội nguồn.* ❤️
