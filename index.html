@@ -1,0 +1,82 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gia Phả Dòng Họ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #f8fafc;
+        }
+
+        .light-mode {
+            --glass-bg: rgba(255, 255, 255, 0.6);
+            --glass-border: rgba(0, 0, 0, 0.1);
+            --text-main: #0f172a;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+        }
+
+        .font-display {
+            font-family: 'Playfair Display', serif;
+        }
+
+        @media print {
+            @page { size: A4; margin: 10mm; }
+            body { background: white !important; color: black !important; }
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            .glass { background: transparent !important; border: 1px solid #ddd !important; box-shadow: none !important; color: black !important; }
+            table { width: 100%; border-collapse: collapse; }
+            th, td { border: 1px solid #ddd; padding: 8px; color: black !important; }
+        }
+
+        .tree-node {
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .tree-node:hover {
+            transform: translateY(-5px) scale(1.02);
+            border-color: rgba(59, 130, 246, 0.5);
+        }
+
+        /* Tối ưu scrollbar cho glassmorphism */
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(155, 155, 155, 0.3); border-radius: 10px; }
+    </style>
+    <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.4",
+    "react-dom": "https://esm.sh/react-dom@^19.2.4",
+    "react-dom/client": "https://esm.sh/react-dom@^19.2.4/client",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "react/": "https://esm.sh/react@^19.2.4/"
+  }
+}
+</script>
+</head>
+<body class="bg-slate-950 text-slate-100">
+    <div id="root"></div>
+    <script type="module" src="index.tsx"></script>
+</body>
+</html>
