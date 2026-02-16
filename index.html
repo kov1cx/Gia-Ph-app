@@ -7,37 +7,29 @@
     <title>Gia Phả Số - Digital Genealogy</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100;0,300;0,400;0,700;0,900;1,400&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Midnight Deep Theme - Dark */
-            --bg-page: #020617;
-            --glass-bg: rgba(15, 23, 42, 0.6);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --bloom-blue: rgba(59, 130, 246, 0.4);
-            --bloom-pink: rgba(236, 72, 153, 0.4);
-            --text-main: #f1f5f9;
-            --text-muted: #94a3b8;
-        }
-
-        .light-mode {
-            /* High Contrast Theme - Light */
-            --bg-page: #f8fafc;
-            --glass-bg: rgba(255, 255, 255, 0.95);
-            --glass-border: rgba(15, 23, 42, 0.15);
-            --bloom-blue: rgba(37, 99, 235, 0.1);
-            --bloom-pink: rgba(219, 39, 119, 0.1);
-            --text-main: #020617; /* Slate-950 cho độ tương phản tối đa */
-            --text-muted: #475569;
+            --bg-page: #050505;
+            --glass-bg: rgba(15, 15, 18, 0.8);
+            --glass-border: rgba(245, 158, 11, 0.15);
+            --gold: #f59e0b;
+            --gold-bright: #fbbf24;
+            --gold-dark: #b45309;
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
             padding: 0;
-            transition: background-color 0.5s ease, color 0.5s ease;
             background-color: var(--bg-page);
-            color: var(--text-main);
+            color: #f3f4f6;
+            overflow-x: hidden;
+        }
+
+        .font-display { 
+            font-family: 'Playfair Display', serif; 
+            letter-spacing: -0.02em;
         }
 
         .glass {
@@ -47,40 +39,36 @@
             border: 1px solid var(--glass-border);
         }
 
-        .font-display { font-family: 'Playfair Display', serif; }
-
-        /* Tree View Drawing */
-        .tree-node {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .tree-node:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px -15px var(--bloom-blue);
+        /* Nâng cấp hiệu ứng rực rỡ cho nút và node */
+        .gold-glow {
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.1), inset 0 0 15px rgba(245, 158, 11, 0.05);
         }
 
-        /* Print Optimization */
+        .glow-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(140px);
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.4;
+        }
+
+        @keyframes breathe {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.05); }
+        }
+        .animate-breathe { animation: breathe 8s ease-in-out infinite; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #0a0a0c; }
+        ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
         @media print {
-            @page { size: A4; margin: 15mm; }
-            body { background: white !important; color: black !important; }
             .no-print { display: none !important; }
-            .print-only { display: block !important; }
-            .glass { background: transparent !important; border: 1px solid #000 !important; box-shadow: none !important; color: black !important; backdrop-filter: none !important; }
-            h1, h2, h3 { color: black !important; }
-            table { border: 1px solid #000 !important; }
-            th, td { border: 1px solid #000 !important; padding: 6px !important; color: black !important; }
+            body { background: white; color: black; }
         }
-
-        /* Scrollbar */
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(59, 130, 246, 0.2); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(59, 130, 246, 0.5); }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
-        .animate-float { animation: float 10s ease-in-out infinite; }
     </style>
     <script type="importmap">
     {
@@ -94,7 +82,7 @@
     }
     </script>
 </head>
-<body class="selection:bg-blue-500/30">
+<body>
     <div id="root"></div>
     <script type="module" src="index.tsx"></script>
 </body>

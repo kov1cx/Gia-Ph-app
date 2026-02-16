@@ -16,11 +16,12 @@ const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabType>('tree');
   const [members, setMembers] = useState<FamilyMember[]>([]);
   const [selectedMember, setSelectedMember] = useState<FamilyMember | null>(null);
+  const [isAddingMode, setIsAddingMode] = useState(false);
+  const [addingParentId, setAddingParentId] = useState<string | null>(null);
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [clanBio, setClanBio] = useState<string>("");
   const [isSaved, setIsSaved] = useState(true);
 
-  // Load data from LocalStorage on startup (Desktop/Offline behavior)
   useEffect(() => {
     const savedMembers = localStorage.getItem(STORAGE_KEY);
     const savedBio = localStorage.getItem(BIO_KEY);
@@ -28,7 +29,6 @@ const App: React.FC = () => {
     if (savedMembers) {
       setMembers(JSON.parse(savedMembers));
     } else {
-      // Default demo data if empty
       setMembers([
         { id: '1', name: 'Nguyễn Văn Tổ', birthYear: '1850', deathDate: '15/03 âm lịch', parentId: null, spouse: 'Lê Thị Tổ', gender: 'Nam', rank: 'Đời thứ 1' },
         { id: '2', name: 'Nguyễn Văn A', birthYear: '1880', deathDate: '10/10 âm lịch', parentId: '1', spouse: 'Trần Thị B', gender: 'Nam', rank: 'Đời thứ 2' }
@@ -42,7 +42,6 @@ const App: React.FC = () => {
     }
   }, []);
 
-  // Sync to LocalStorage whenever data changes
   useEffect(() => {
     if (members.length > 0) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(members));
@@ -61,21 +60,35 @@ const App: React.FC = () => {
     const body = document.body;
     if (isDarkMode) {
       body.classList.remove('light-mode');
-      body.style.backgroundColor = '#020617';
+      body.style.backgroundColor = '#050505';
     } else {
       body.classList.add('light-mode');
-      body.style.backgroundColor = '#f8fafc';
+      body.style.backgroundColor = '#fdfbf7';
     }
   }, [isDarkMode]);
 
-  const handleExcelUpload = (data: FamilyMember[]) => {
-    setMembers(data);
+  const handleAddMember = (parentId: string | null = null) => {
+    setAddingParentId(parentId);
+    setIsAddingMode(true);
+  };
+
+  const handleSaveNewMember = (newMember: FamilyMember) => {
+    setMembers(prev => [...prev, { ...newMember, id: Date.now().toString() }]);
+    setIsAddingMode(false);
     setIsSaved(false);
   };
 
-  const handleUpdateBio = (newBio: string) => {
-    setClanBio(newBio);
-    setIsSaved(false);
+  const handleDeleteMember = (id: string) => {
+    if (confirm("Bạn có chắc chắn muốn xóa thành viên này và toàn bộ con cháu của họ?")) {
+      const idsToDelete = new Set<string>();
+      const findChildren = (pid: string) => {
+        idsToDelete.add(pid);
+        members.filter(m => m.parentId === pid).forEach(child => findChildren(child.id));
+      };
+      findChildren(id);
+      setMembers(prev => prev.filter(m => !idsToDelete.has(m.id)));
+      setIsSaved(false);
+    }
   };
 
   const handleDownloadSample = () => {
@@ -83,71 +96,74 @@ const App: React.FC = () => {
     if (!XLSX) return;
     const data = [
       ["ID", "Parent_ID", "HoTen", "NamSinh", "NgayMat", "GioiTinh", "ThuBac", "VoChong", "GhiChu"],
-      ["1", "", "Nguyễn Văn Tổ", "1850", "15/03 âm lịch", "Nam", "Đời 1", "Lê Thị Tổ", "Cụ tổ khai sáng"],
-      ["2", "1", "Nguyễn Văn A", "1880", "10/10 âm lịch", "Nam", "Đời 2", "Trần Thị B", "Trưởng chi"]
+      ["1", "", "Nguyễn Văn Tổ", "1850", "15/03 âm lịch", "Nam", "Đời 1", "Lê Thị Tổ", "Cụ tổ"],
+      ["2", "1", "Nguyễn Văn A", "1880", "10/10 âm lịch", "Nam", "Đời 2", "Trần Thị B", "Con trưởng"]
     ];
     const ws = XLSX.utils.aoa_to_sheet(data);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "GiaPha");
-    XLSX.writeFile(wb, "Mau_Gia_Pha_Desktop.xlsx");
+    XLSX.writeFile(wb, "Mau_Gia_Pha_So.xlsx");
   };
 
-  if (isIntro) return <Splash onEnter={() => setIsIntro(false)} />;
-
   return (
-    <div className="min-h-screen flex flex-col relative">
-      <div className="fixed top-[-20%] left-[-10%] w-[70%] h-[70%] bg-blue-600/5 rounded-full blur-[150px] pointer-events-none animate-float" />
-      <div className="fixed bottom-[-20%] right-[-10%] w-[70%] h-[70%] bg-indigo-600/5 rounded-full blur-[150px] pointer-events-none animate-float" style={{ animationDelay: '-5s' }} />
+    <div className="min-h-screen flex flex-col relative overflow-hidden bg-[#050505]">
+      {isIntro && <Splash onEnter={() => setIsIntro(false)} />}
 
-      <Navbar 
-        activeTab={activeTab} 
-        onTabChange={setActiveTab} 
-        onUpload={handleExcelUpload} 
-        onExport={() => window.print()}
-        onDownloadSample={handleDownloadSample}
-        isDarkMode={isDarkMode}
-        toggleTheme={() => setIsDarkMode(!isDarkMode)}
-        isSaved={isSaved}
-      />
+      <div className={`flex flex-col min-h-screen transition-all duration-1000 ${isIntro ? 'opacity-0 scale-95 blur-xl' : 'opacity-100 scale-100 blur-0'}`}>
+        <div className="glow-orb top-[-10%] left-[-5%] w-[60%] h-[60%] bg-amber-600/10 animate-float" />
+        <div className="glow-orb bottom-[-10%] right-[-5%] w-[60%] h-[60%] bg-orange-900/10 animate-float" style={{ animationDelay: '-7s' }} />
 
-      <main className="flex-grow container mx-auto px-4 py-8 relative z-10">
-        <div className="no-print">
-          {activeTab === 'list' && <ListView members={members} onSelect={setSelectedMember} />}
-          {activeTab === 'tree' && <TreeView members={members} onSelect={setSelectedMember} />}
-          {activeTab === 'history' && <ClanHistory biography={clanBio} onUpdate={handleUpdateBio} />}
-        </div>
+        <Navbar 
+          activeTab={activeTab} 
+          onTabChange={setActiveTab} 
+          onUpload={setMembers} 
+          onAddMember={() => handleAddMember(null)}
+          onExport={() => window.print()}
+          onDownloadSample={handleDownloadSample}
+          isDarkMode={isDarkMode}
+          toggleTheme={() => setIsDarkMode(!isDarkMode)}
+          isSaved={isSaved}
+        />
 
-        <div className="hidden print-only">
-          <div className="text-center mb-16 border-b-8 border-double border-black pb-8">
-            <h1 className="text-6xl font-display font-bold uppercase">Gia Phả Dòng Họ</h1>
-            <p className="text-xl mt-4 italic">Tài liệu lưu trữ nội bộ</p>
+        <main className="flex-grow container mx-auto px-4 py-8 relative z-10">
+          <div className="no-print">
+            {activeTab === 'list' && <ListView members={members} onSelect={setSelectedMember} />}
+            {activeTab === 'tree' && <TreeView members={members} onSelect={setSelectedMember} onAddChild={handleAddMember} />}
+            {activeTab === 'history' && <ClanHistory biography={clanBio} onUpdate={setClanBio} />}
           </div>
-          <div className="mb-12">
-            <h2 className="text-3xl font-bold mb-6">I. Tiểu sử dòng họ</h2>
-            <p className="text-lg leading-relaxed whitespace-pre-wrap">{clanBio}</p>
-          </div>
-          <div className="mb-12">
-            <h2 className="text-3xl font-bold mb-6">II. Danh sách thành viên</h2>
+
+          <div className="hidden print-only">
+            <div className="text-center mb-16 border-b-8 border-double border-black pb-8">
+              <h1 className="text-6xl font-display font-bold uppercase">Gia Phả Dòng Họ</h1>
+            </div>
+            <ClanHistory biography={clanBio} onUpdate={() => {}} />
             <ListView members={members} onSelect={() => {}} />
           </div>
-        </div>
-      </main>
+        </main>
 
-      {selectedMember && (
-        <DetailsModal 
-          member={selectedMember} 
-          members={members} 
-          onClose={() => setSelectedMember(null)} 
-          onSave={(updated) => {
-            setMembers(prev => prev.map(m => m.id === updated.id ? updated : m));
-            setIsSaved(false);
-          }}
-        />
-      )}
+        {(selectedMember || isAddingMode) && (
+          <DetailsModal 
+            member={isAddingMode ? { id: '', name: '', birthYear: '', parentId: addingParentId, gender: 'Nam' } : selectedMember!} 
+            members={members} 
+            isNew={isAddingMode}
+            onClose={() => { setSelectedMember(null); setIsAddingMode(false); }} 
+            onSave={(updated) => {
+              if (isAddingMode) handleSaveNewMember(updated);
+              else {
+                setMembers(prev => prev.map(m => m.id === updated.id ? updated : m));
+                setIsSaved(false);
+              }
+              setSelectedMember(null);
+              setIsAddingMode(false);
+            }}
+            onDelete={handleDeleteMember}
+          />
+        )}
 
-      <footer className="no-print py-10 text-center opacity-50 text-[10px] uppercase tracking-[0.4em] font-black">
-        GenHeritage Offline Mode • Release v1.1
-      </footer>
+        <footer className="no-print py-10 text-center opacity-30 text-[9px] uppercase tracking-[0.6em] font-black">
+          GenHeritage • Royal Legacy Edition • v1.4
+        </footer>
+      </div>
     </div>
   );
 };
