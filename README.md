@@ -1,47 +1,57 @@
+# 🌳 Gia Phả Số - Digital Genealogy
 
-# 🌳 Gia Phả Số v1.5 (Final Heritage Edition) - Hướng dẫn tạo file EXE
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Platform](https://img.shields.io/badge/platform-Web-orange.svg)]()
+[![Style](https://img.shields.io/badge/style-Glassmorphism-9cf)]()
+[![Tech](https://img.shields.io/badge/built%20with-HTML5%20%7C%20JS-yellow)]()
 
-Đây là phiên bản thương mại/di sản đã sẵn sàng để đóng gói thành phần mềm máy tính độc lập.
+> Một giải pháp tạo lập gia phả dòng họ hiện đại, bảo mật và thẩm mỹ ngay trên trình duyệt web. Biến file Excel khô khan thành cây gia phả sống động và xuất file in thành quyển để lưu giữ sau này.
+<img width="2557" height="1271" alt="image" src="https://github.com/user-attachments/assets/5db26794-ebda-48cc-b0d5-c8256cb8849e" />
 
-## 🛠 Yêu cầu hệ thống
-1. **Node.js**: Phiên bản 18 trở lên (Tải tại [nodejs.org](https://nodejs.org/)).
-2. **Git**: (Tùy chọn) để quản lý mã nguồn.
 
-## 🚀 Quy trình 3 bước để có file .exe
 
-### Bước 1: Khởi tạo môi trường
-Mở thư mục dự án trong Terminal/Command Prompt và chạy:
-```bash
-npm install
-```
-*Lưu ý: Quá trình này có thể mất 1-2 phút để tải Electron.*
+## ✨ Tính năng nổi bật (Key Features)
 
-### Bước 2: Kiểm tra trước khi đóng gói (Tùy chọn)
-Chạy thử ứng dụng dưới dạng phần mềm để kiểm tra giao diện:
-```bash
-npm run dev
-```
+* **🎨 Giao diện Glassmorphism:** Thiết kế kính mờ sang trọng, độ tương phản cao, hỗ trợ Dark Mode giúp tôn vinh sự trang trọng.
+* **🚀 Serverless & Private:** Chạy trực tiếp trên trình duyệt (Client-side). Dữ liệu nằm trong túi bạn, không gửi lên máy chủ lạ.
+* **📂 Excel Import:** Tự động đọc và phân tích file Excel (`.xlsx`) để dựng cây gia phả tức thì.
+* **🔗 Auto-Link Logic:** Thuật toán tự động nối dây quan hệ huyết thống dựa trên `ID` và `Parent_ID`.
+* **🖨️ Print Ready:** Chế độ in ấn thông minh, tự động chuyển đổi sang khổ giấy A4 để đóng thành sách.
+* **🔍 Interactive:** Phóng to, thu nhỏ, kéo thả cây gia phả mượt mà.
 
-### Bước 3: Đóng gói chính thức
-Chạy lệnh quan trọng nhất:
-```bash
-npm run dist
-```
+## 🛠️ Công nghệ sử dụng
 
-## 📦 Kết quả
-Sau khi lệnh hoàn tất, hãy vào thư mục **`dist_electron`**.
-Bạn sẽ thấy file: `GiaPhaSo_v1.5_Final_1.5.0_portable.exe`.
+* **Core:** HTML5, CSS3 (Variables, Flexbox, Grid).
+* **Logic:** Vanilla JavaScript (ES6+).
+* **Library:** [SheetJS (xlsx)](https://sheetjs.com/) để xử lý dữ liệu Excel.
+* **Visualization:** CSS Pseudo-elements vẽ sơ đồ cây (nhẹ hơn Canvas/SVG).
+
+
+### 📝 Cấu trúc file Excel
+
+Để ứng dụng vẽ đúng cây, file Excel cần có các cột sau (tên cột không phân biệt hoa thường):
+
+| ID | Parent_ID | HoTen | NamSinh | NamMat | TieuSu |
+|:---|:---|:---|:---|:---|:---|
+| 1 | *(Trống)* | Nguyễn Văn A | 1920 | 1990 | Cụ Tổ |
+| 2 | 1 | Nguyễn Văn B | 1950 | - | Con cụ A |
+| 3 | 2 | Nguyễn Văn C | 1980 | - | Cháu cụ A |
+
+> **Lưu ý:** `Parent_ID` là ID của người cha. Người đứng đầu dòng họ để trống ô này.
+
+## 🤝 Đóng góp (Contributing)
+
+Mọi đóng góp đều được hoan nghênh! Nếu bạn muốn cải thiện thuật toán vẽ cây hoặc thêm giao diện mới:
+1.  Fork dự án này.
+2.  Tạo nhánh mới (`git checkout -b feature/AmazingFeature`).
+3.  Commit thay đổi (`git commit -m 'Add some AmazingFeature'`).
+4.  Push lên nhánh (`git push origin feature/AmazingFeature`).
+5.  Mở Pull Request.
+
+## 👤 Tác giả
+
+**kov1cx**
+* Github: [@kov1cx](https://github.com/kov1cx)
 
 ---
-
-## 💡 Ưu điểm của bản Portable EXE:
-* **Chạy ngay không cần cài đặt**: Bạn có thể copy file này vào USB và chạy trên bất kỳ máy Windows nào.
-* **Biểu tượng chuyên nghiệp**: Ứng dụng chạy trong cửa sổ riêng, không có thanh địa chỉ web.
-* **Bảo mật dữ liệu**: Dữ liệu được lưu trữ cục bộ, không gửi lên bất kỳ máy chủ nào.
-
-## 📝 Lưu ý quan trọng:
-* Ứng dụng hiện tại vẫn sử dụng CDN cho CSS (Tailwind) và Excel (SheetJS). Do đó, máy tính cần có kết nối Internet khi chạy lần đầu để tải các thư viện này vào cache.
-* Để chuyển sang **Offline hoàn toàn**, bạn cần tải các file `.js` và `.css` từ CDN về thư mục `public/` và sửa lại đường dẫn trong `index.html`.
-
----
-*Tôn vinh cội nguồn - Kết nối tương lai*
+*Dự án này được xây dựng với niềm tự hào về cội nguồn.* ❤️
