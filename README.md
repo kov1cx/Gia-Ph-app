@@ -1,48 +1,37 @@
 
-# 🌳 Gia Phả Số - Digital Genealogy (Desktop Ready)
+# 🌳 Gia Phả Số - Hướng dẫn đóng gói EXE
 
-Bản cập nhật v1.1 hỗ trợ lưu trữ dữ liệu vĩnh viễn trên máy tính và sẵn sàng đóng gói thành ứng dụng Windows (.exe).
+Phiên bản v1.5 đã được cấu hình sẵn để chuyển đổi thành ứng dụng Desktop (.exe).
 
-## 🚀 Cách biến thành App Windows (.exe)
+## 🛠 Yêu cầu chuẩn bị
+1. Cài đặt **Node.js** (tải tại [nodejs.org](https://nodejs.org/)).
+2. Mở terminal (CMD hoặc PowerShell) tại thư mục chứa dự án này.
 
-Nếu bạn muốn biến project này thành một file `.exe` chạy độc lập, hãy làm theo các bước sau:
+## 🚀 Các bước thực hiện
 
-### Bước 1: Khởi tạo Project Electron
-Trong thư mục chứa code của bạn, chạy lệnh:
+### Bước 1: Cài đặt thư viện cần thiết
+Chạy lệnh sau để tải Electron và công cụ đóng gói:
 ```bash
-npm init -y
-npm install electron --save-dev
+npm install
 ```
 
-### Bước 2: Tạo file `main.js` (Cấu hình Electron)
-Tạo một file mới tên là `main.js` với nội dung sau:
-```javascript
-const { app, BrowserWindow } = require('electron')
-function createWindow () {
-  const win = new BrowserWindow({
-    width: 1200, height: 800,
-    icon: __dirname + '/icon.ico',
-    webPreferences: { nodeIntegration: true }
-  })
-  win.loadFile('index.html') // Load file HTML của bạn
-}
-app.whenReady().then(createWindow)
-```
-
-### Bước 3: Đóng gói thành EXE
-Sử dụng công cụ `electron-packager`:
+### Bước 2: Chạy thử ứng dụng (Optional)
+Để xem ứng dụng chạy dưới dạng cửa sổ phần mềm trước khi đóng gói:
 ```bash
-npx electron-packager . GiaPhaSo --platform=win32 --arch=x64 --out=dist/
+npm start
 ```
 
-## 🛠️ Tính năng Offline (Mới)
-* **Auto-Save**: Mọi thay đổi về thành viên hoặc tiểu sử sẽ tự động được lưu vào `localStorage` của máy tính.
-* **No Internet Required**: Ứng dụng có thể mở và xem lại gia phả cũ ngay cả khi không có mạng (sau lần tải đầu tiên để trình duyệt cache các thư viện).
+### Bước 3: Đóng gói thành file .exe
+Chạy lệnh này để tạo ra bản portable (chạy ngay không cần cài đặt):
+```bash
+npm run build
+```
 
-## 📝 Lưu ý quan trọng
-Để app hoạt động **100% offline không cần mạng lần đầu**, bạn nên:
-1. Tải file `xlsx.full.min.js` từ CDN về thư mục gốc.
-2. Sửa lại thẻ `<script src="...">` trong `index.html` để trỏ vào file nội bộ thay vì link web.
+Sau khi chạy xong, bạn sẽ thấy thư mục `dist_electron`. File `GiaPhaSo.exe` nằm trong đó.
+
+## 📝 Lưu ý quan trọng cho bản Desktop
+* **Offline hoàn toàn**: Để ứng dụng chạy khi không có mạng, bạn nên tải các file CSS/JS từ CDN (như Tailwind, Google Fonts) về máy và sửa lại đường dẫn trong `index.html`.
+* **Dữ liệu**: Dữ liệu vẫn được lưu trong `localStorage` của ứng dụng Desktop, tương tự như trên trình duyệt. Nếu bạn xóa file `.exe` và tải bản mới ở thư mục khác, dữ liệu có thể bị trống nếu không được xuất ra file Excel trước đó.
 
 ---
-*Phát triển bởi kov1cx • Tự hào cội nguồn Việt.* ❤️
+*Tự hào cội nguồn Việt - Phiên bản Di Sản v1.5*
