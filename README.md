@@ -5,7 +5,7 @@
 [![Style](https://img.shields.io/badge/style-Glassmorphism-9cf)]()
 [![Tech](https://img.shields.io/badge/built%20with-HTML5%20%7C%20JS-yellow)]()
 
-> Một giải pháp tạo lập gia phả dòng họ hiện đại, bảo mật và thẩm mỹ ngay trên trình duyệt web. Biến file Excel khô khan thành cây gia phả sống động.
+> Một giải pháp tạo lập gia phả dòng họ hiện đại, bảo mật và thẩm mỹ ngay trên trình duyệt web. Biến file Excel khô khan thành cây gia phả sống động và xuất file in thành quyển để lưu giữ sau này.
 <img width="2557" height="1271" alt="image" src="https://github.com/user-attachments/assets/5db26794-ebda-48cc-b0d5-c8256cb8849e" />
 
 
