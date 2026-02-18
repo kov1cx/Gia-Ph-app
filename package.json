@@ -2,17 +2,31 @@
 {
   "name": "gia-pha-so",
   "version": "1.5.0",
-  "description": "Ứng dụng quản lý gia phả kỹ thuật số",
+  "description": "Ứng dụng quản lý gia phả kỹ thuật số chuyên nghiệp",
   "main": "main.js",
   "scripts": {
-    "start": "electron .",
-    "build": "electron-builder"
+    "dev": "concurrently \"vite\" \"wait-on http://localhost:5173 && electron .\"",
+    "build": "vite build",
+    "preview": "vite preview",
+    "dist": "npm run build && electron-builder",
+    "postinstall": "electron-builder install-app-deps"
   },
   "author": "Heritage Team",
   "license": "ISC",
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
   "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "concurrently": "^8.2.2",
     "electron": "^31.0.0",
-    "electron-builder": "^24.13.3"
+    "electron-builder": "^24.13.3",
+    "typescript": "^5.5.2",
+    "vite": "^5.3.1",
+    "wait-on": "^7.2.0"
   },
   "build": {
     "appId": "com.heritage.giaphaso",
@@ -23,6 +37,10 @@
     "win": {
       "target": "portable",
       "icon": "icon.ico"
-    }
+    },
+    "files": [
+      "dist/**/*",
+      "main.js"
+    ]
   }
 }

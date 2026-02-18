@@ -2,6 +2,9 @@
 const { app, BrowserWindow, Menu } = require('electron');
 const path = require('path');
 
+// Kiểm tra xem có đang ở chế độ phát triển không
+const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged;
+
 function createWindow() {
   const win = new BrowserWindow({
     width: 1280,
@@ -14,14 +17,16 @@ function createWindow() {
     }
   });
 
-  // Load file index.html từ thư mục gốc
-  win.loadFile('index.html');
+  if (isDev) {
+    // Nếu đang dev, load từ Vite server
+    win.loadURL('http://localhost:5173');
+    // win.webContents.openDevTools(); // Mở console để debug nếu cần
+  } else {
+    // Nếu đã build, load file tĩnh trong thư mục dist
+    win.loadFile(path.join(__dirname, 'dist/index.html'));
+  }
 
-  // Ẩn Menu bar mặc định để trông chuyên nghiệp hơn
   Menu.setApplicationMenu(null);
-
-  // Mở DevTools nếu cần (nhấn Ctrl+Shift+I trong app)
-  // win.webContents.openDevTools();
 }
 
 app.whenReady().then(() => {
