@@ -6,6 +6,7 @@ interface TreeViewProps {
   members: FamilyMember[];
   onSelect: (member: FamilyMember) => void;
   onAddChild?: (parentId: string) => void;
+  isDarkMode: boolean;
 }
 
 const TreeNode: React.FC<{ 
@@ -13,44 +14,44 @@ const TreeNode: React.FC<{
   members: FamilyMember[]; 
   onSelect: (member: FamilyMember) => void;
   onAddChild?: (parentId: string) => void;
-}> = ({ member, members, onSelect, onAddChild }) => {
+  isDarkMode: boolean;
+}> = ({ member, members, onSelect, onAddChild, isDarkMode }) => {
   const children = members.filter(m => m.parentId && String(m.parentId) === String(member.id));
   const isMale = member.gender === 'Nam';
 
   return (
     <div className="flex flex-col items-center animate-in fade-in slide-in-from-top-6 duration-1000">
       <div 
-        className={`tree-node min-w-[190px] md:min-w-[240px] glass p-8 rounded-[2.5rem] border-2 flex flex-col items-center gap-1 shadow-2xl relative z-10 ${isMale ? 'border-amber-500/20' : 'border-orange-400/20'} bg-black/40`}
+        className={`tree-node min-w-[190px] md:min-w-[240px] glass p-8 rounded-[2.5rem] border-2 flex flex-col items-center gap-1 shadow-2xl relative z-10 ${isMale ? 'border-amber-500/20' : 'border-orange-400/20'} ${isDarkMode ? 'bg-black/40' : 'bg-white/40'}`}
       >
         <div onClick={() => onSelect(member)} className="absolute inset-0 rounded-[2.5rem] cursor-pointer"></div>
         
         <div className={`absolute inset-0 rounded-[2.5rem] bg-gradient-to-br ${isMale ? 'from-amber-500/5' : 'from-orange-500/5'} to-transparent pointer-events-none`}></div>
         
-        <span className="text-[8px] text-amber-600/70 dark:text-amber-500/50 font-black uppercase tracking-[0.3em] mb-4 px-3 py-1 bg-amber-500/5 rounded-full border border-amber-500/10 relative z-20">
+        <span className={`text-[8px] font-black uppercase tracking-[0.3em] mb-4 px-3 py-1 rounded-full border relative z-20 ${isDarkMode ? 'text-amber-500/50 bg-amber-500/5 border-amber-500/10' : 'text-amber-700 bg-amber-600/10 border-amber-600/10'}`}>
           {member.rank || 'Tiếp nối'}
         </span>
         
-        <span className="text-base md:text-lg font-bold text-center tracking-tight leading-tight text-slate-100 drop-shadow-md relative z-20">
+        <span className={`text-base md:text-lg font-bold text-center tracking-tight leading-tight drop-shadow-md relative z-20 ${isDarkMode ? 'text-slate-100' : 'text-slate-900'}`}>
           {member.name}
         </span>
         
         <div className="flex flex-col items-center mt-3 opacity-80 relative z-20">
-          <span className="text-[10px] font-mono text-amber-200/60 font-bold">{member.birthYear ? `S: ${member.birthYear}` : ''}</span>
-          {member.deathDate && <span className="text-[9px] font-mono text-amber-500 font-black tracking-tighter uppercase">{member.deathDate}</span>}
+          <span className={`text-[10px] font-mono font-bold ${isDarkMode ? 'text-amber-200/60' : 'text-amber-900/60'}`}>{member.birthYear ? `S: ${member.birthYear}` : ''}</span>
+          {member.deathDate && <span className={`text-[9px] font-mono font-black tracking-tighter uppercase ${isDarkMode ? 'text-amber-500' : 'text-amber-700'}`}>{member.deathDate}</span>}
         </div>
         
         {member.spouse && (
           <div className="mt-5 pt-4 border-t border-amber-500/10 w-full text-center relative z-20">
-            <span className="text-[10px] text-amber-600/60 italic block overflow-hidden text-ellipsis whitespace-nowrap px-1 font-medium">
+            <span className={`text-[10px] italic block overflow-hidden text-ellipsis whitespace-nowrap px-1 font-medium ${isDarkMode ? 'text-amber-600/60' : 'text-amber-900/60'}`}>
                {isMale ? 'Vợ: ' : 'Chồng: '}{member.spouse}
             </span>
           </div>
         )}
 
-        {/* Nút thêm con cái */}
         <button 
           onClick={(e) => { e.stopPropagation(); onAddChild?.(member.id); }}
-          className="absolute bottom-[-15px] bg-amber-600 hover:bg-amber-500 text-black p-1.5 rounded-full shadow-lg border-2 border-black z-30 opacity-0 group-hover:opacity-100 transition-opacity hover:scale-110 active:scale-95"
+          className="absolute bottom-[-15px] bg-amber-600 hover:bg-amber-500 text-white p-1.5 rounded-full shadow-lg border-2 border-white dark:border-black z-30 opacity-0 group-hover:opacity-100 transition-opacity hover:scale-110 active:scale-95"
           title="Thêm con cái"
         >
           <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M12 4v16m8-8H4"></path></svg>
@@ -59,7 +60,7 @@ const TreeNode: React.FC<{
 
       {children.length > 0 && (
         <>
-          <div className="h-14 w-[2px] bg-gradient-to-b from-amber-600/50 via-amber-600/10 to-transparent shadow-[0_0_15px_rgba(245,158,11,0.3)]"></div>
+          <div className={`h-14 w-[2px] bg-gradient-to-b from-amber-600/50 via-amber-600/10 to-transparent shadow-[0_0_15px_rgba(245,158,11,0.3)]`}></div>
           <div className="flex flex-row gap-12 md:gap-20 relative pt-10">
             {children.length > 1 && (
               <div className="absolute top-0 left-[20%] right-[20%] h-[1px] bg-amber-500/20 rounded-full shadow-[0_0_10px_rgba(245,158,11,0.2)]"></div>
@@ -67,7 +68,7 @@ const TreeNode: React.FC<{
             {children.map(child => (
               <div key={child.id} className="relative group">
                 <div className="absolute top-[-40px] left-1/2 -translate-x-1/2 h-10 w-[1px] bg-amber-500/20"></div>
-                <TreeNode member={child} members={members} onSelect={onSelect} onAddChild={onAddChild} />
+                <TreeNode member={child} members={members} onSelect={onSelect} onAddChild={onAddChild} isDarkMode={isDarkMode} />
               </div>
             ))}
           </div>
@@ -77,12 +78,12 @@ const TreeNode: React.FC<{
   );
 };
 
-const TreeView: React.FC<TreeViewProps> = ({ members, onSelect, onAddChild }) => {
+const TreeView: React.FC<TreeViewProps> = ({ members, onSelect, onAddChild, isDarkMode }) => {
   const roots = members.filter(m => !m.parentId || m.parentId === "null" || m.parentId === "0" || m.parentId === "");
   
   return (
     <div className="space-y-32">
-      <div className="overflow-x-auto p-12 md:p-32 min-h-[75vh] flex justify-center items-start rounded-[4rem] bg-black/40 border border-amber-500/5 transition-all scroll-smooth shadow-[inset_0_0_150px_rgba(245,158,11,0.03)]">
+      <div className={`overflow-x-auto p-12 md:p-32 min-h-[75vh] flex justify-center items-start rounded-[4rem] border border-amber-500/5 transition-all scroll-smooth shadow-[inset_0_0_150px_rgba(245,158,11,0.03)] ${isDarkMode ? 'bg-black/40' : 'bg-white/40'}`}>
         <div className="flex flex-col items-center gap-32 md:gap-48 w-max">
           {roots.length === 0 ? (
             <div className="flex flex-col items-center gap-8 text-amber-900/40 py-40 text-center">
@@ -94,7 +95,7 @@ const TreeView: React.FC<TreeViewProps> = ({ members, onSelect, onAddChild }) =>
           ) : (
             roots.map(root => (
               <div key={root.id} className="group">
-                <TreeNode member={root} members={members} onSelect={onSelect} onAddChild={onAddChild} />
+                <TreeNode member={root} members={members} onSelect={onSelect} onAddChild={onAddChild} isDarkMode={isDarkMode} />
               </div>
             ))
           )}

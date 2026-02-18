@@ -33,7 +33,7 @@ const DetailsModal: React.FC<DetailsModalProps> = ({ member, members, onClose, o
 
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/80 backdrop-blur-md" onClick={onClose}></div>
+      <div className="absolute inset-0 bg-black/80 backdrop-blur-md transition-colors duration-500" onClick={onClose}></div>
       <div className="relative w-full max-w-lg glass rounded-[3rem] overflow-hidden border border-amber-500/20 animate-in fade-in zoom-in duration-300 shadow-2xl bg-[#0a0a0c]/90">
         
         {/* Header Section */}
@@ -56,7 +56,7 @@ const DetailsModal: React.FC<DetailsModalProps> = ({ member, members, onClose, o
             <div className="space-y-4 max-w-sm mx-auto">
               <input 
                 autoFocus
-                className="bg-black/40 border border-amber-500/30 rounded-2xl px-5 py-3 text-lg w-full text-center text-white focus:outline-none focus:border-amber-500 shadow-inner"
+                className="bg-black/40 border border-amber-500/30 rounded-2xl px-5 py-3 text-lg w-full text-center text-white focus:outline-none focus:border-amber-500 shadow-inner placeholder:text-amber-900/20"
                 value={formData.name}
                 onChange={e => setFormData({...formData, name: e.target.value})}
                 placeholder="Họ và Tên"
@@ -87,7 +87,7 @@ const DetailsModal: React.FC<DetailsModalProps> = ({ member, members, onClose, o
                   placeholder="Ví dụ: 1990"
                 />
               ) : (
-                <p className="text-xl font-bold text-slate-100">{member.birthYear || '—'}</p>
+                <p className="text-xl font-bold text-white">{member.birthYear || '—'}</p>
               )}
             </div>
             <div className="glass p-5 rounded-2xl border border-amber-500/10">
@@ -116,7 +116,7 @@ const DetailsModal: React.FC<DetailsModalProps> = ({ member, members, onClose, o
                   placeholder="Họ tên bạn đời"
                 />
               ) : (
-                <p className="text-slate-300 italic text-lg">{member.spouse || 'Đang cập nhật'}</p>
+                <p className="text-amber-200 italic text-lg">{member.spouse || 'Đang cập nhật'}</p>
               )}
             </div>
 
@@ -130,7 +130,7 @@ const DetailsModal: React.FC<DetailsModalProps> = ({ member, members, onClose, o
                   placeholder="Ví dụ: Con cả, Đời thứ 3..."
                 />
               ) : (
-                <p className="text-slate-400 text-sm leading-relaxed">{member.description || 'Không có ghi chú thêm.'}</p>
+                <p className="text-slate-300 text-sm leading-relaxed">{member.description || 'Không có ghi chú thêm.'}</p>
               )}
             </div>
             
@@ -152,7 +152,7 @@ const DetailsModal: React.FC<DetailsModalProps> = ({ member, members, onClose, o
           <div className="flex gap-4 pt-6">
             {editMode ? (
               <>
-                <button onClick={handleSave} className="flex-1 py-4 bg-amber-600 hover:bg-amber-500 text-black rounded-2xl font-black uppercase text-xs tracking-[0.2em] shadow-xl shadow-amber-900/20 active:scale-95 transition-all">Lưu thông tin</button>
+                <button onClick={handleSave} className="flex-1 py-4 bg-amber-700 hover:bg-amber-600 text-white rounded-2xl font-black uppercase text-xs tracking-[0.2em] shadow-xl shadow-amber-900/20 active:scale-95 transition-all">Lưu thông tin</button>
                 <button onClick={() => isNew ? onClose() : setEditMode(false)} className="px-8 py-4 glass border border-amber-500/20 text-amber-500 rounded-2xl text-xs uppercase font-black tracking-widest active:scale-95 transition-all">Hủy</button>
               </>
             ) : (

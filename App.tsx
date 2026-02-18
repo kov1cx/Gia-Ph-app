@@ -6,6 +6,8 @@ import ListView from './components/ListView';
 import TreeView from './components/TreeView';
 import DetailsModal from './components/DetailsModal';
 import ClanHistory from './components/ClanHistory';
+import PrintTemplate from './components/PrintTemplate';
+import PrintModal from './components/PrintModal';
 import { FamilyMember, TabType } from './types';
 
 const STORAGE_KEY = 'gen_heritage_data_v1.5';
@@ -21,17 +23,24 @@ const App: React.FC = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [clanBio, setClanBio] = useState<string>("");
   const [isSaved, setIsSaved] = useState(true);
+  const [isPrintModalOpen, setIsPrintModalOpen] = useState(false);
+  const [printTitle, setPrintTitle] = useState("Gia Phả Dòng Họ");
 
   useEffect(() => {
     const savedMembers = localStorage.getItem(STORAGE_KEY);
     const savedBio = localStorage.getItem(BIO_KEY);
+    const savedTheme = localStorage.getItem('gen_heritage_theme');
     
+    if (savedTheme !== null) {
+      setIsDarkMode(savedTheme === 'dark');
+    }
+
     if (savedMembers) {
       setMembers(JSON.parse(savedMembers));
     } else {
       setMembers([
-        { id: '1', name: 'Nguyễn Văn Tổ', birthYear: '1850', deathDate: '15/03 âm lịch', parentId: null, spouse: 'Lê Thị Tổ', gender: 'Nam', rank: 'Đời thứ 1' },
-        { id: '2', name: 'Nguyễn Văn A', birthYear: '1880', deathDate: '10/10 âm lịch', parentId: '1', spouse: 'Trần Thị B', gender: 'Nam', rank: 'Đời thứ 2' }
+        { id: '1', name: 'Nguyễn Văn Tổ', birthYear: '1850', deathDate: '15/03 âm lịch', parentId: null, spouse: 'Lê Thị Tổ', gender: 'Nam', rank: 'Đời thứ 1', description: 'Cụ tổ khai sinh dòng họ.' },
+        { id: '2', name: 'Nguyễn Văn A', birthYear: '1880', deathDate: '10/10 âm lịch', parentId: '1', spouse: 'Trần Thị B', gender: 'Nam', rank: 'Đời thứ 2', description: 'Con trưởng chi 1.' }
       ]);
     }
     
@@ -41,6 +50,16 @@ const App: React.FC = () => {
       setClanBio("Bản gia phả này là tâm huyết của con cháu nhằm lưu giữ cội nguồn dòng họ. Xin hãy trân trọng và bổ sung định kỳ.");
     }
   }, []);
+
+  useEffect(() => {
+    // Sync theme class with body
+    if (isDarkMode) {
+      document.body.classList.remove('light-mode');
+    } else {
+      document.body.classList.add('light-mode');
+    }
+    localStorage.setItem('gen_heritage_theme', isDarkMode ? 'dark' : 'light');
+  }, [isDarkMode]);
 
   useEffect(() => {
     if (members.length > 0) {
@@ -102,20 +121,32 @@ const App: React.FC = () => {
     XLSX.writeFile(wb, "Mau_Gia_Pha_So_v1.5.xlsx");
   };
 
+  const handleExportPDF = () => {
+    setIsPrintModalOpen(true);
+  };
+
+  const handleConfirmPrint = (title: string) => {
+    setPrintTitle(title);
+    setIsPrintModalOpen(false);
+    setTimeout(() => {
+      window.print();
+    }, 300);
+  };
+
   return (
-    <div className="min-h-screen flex flex-col relative overflow-hidden bg-[#050505]">
+    <div className={`min-h-screen flex flex-col relative overflow-hidden transition-colors duration-500`}>
       {isIntro && <Splash onEnter={() => setIsIntro(false)} />}
 
       <div className={`flex flex-col min-h-screen transition-all duration-1000 cubic-bezier(0.4, 0, 0.2, 1) ${isIntro ? 'opacity-0 scale-95 blur-2xl translate-y-20' : 'opacity-100 scale-100 blur-0 translate-y-0'}`}>
-        <div className="glow-orb top-[-10%] left-[-5%] w-[60%] h-[60%] bg-amber-600/10 animate-float" />
-        <div className="glow-orb bottom-[-10%] right-[-5%] w-[60%] h-[60%] bg-orange-900/10 animate-float" style={{ animationDelay: '-7s' }} />
+        <div className={`glow-orb top-[-10%] left-[-5%] w-[60%] h-[60%] animate-float ${isDarkMode ? 'bg-amber-600/10' : 'bg-amber-400/20'}`} />
+        <div className={`glow-orb bottom-[-10%] right-[-5%] w-[60%] h-[60%] animate-float ${isDarkMode ? 'bg-orange-900/10' : 'bg-amber-200/20'}`} style={{ animationDelay: '-7s' }} />
 
         <Navbar 
           activeTab={activeTab} 
           onTabChange={setActiveTab} 
           onUpload={setMembers} 
           onAddMember={() => handleAddMember(null)}
-          onExport={() => window.print()}
+          onExport={handleExportPDF}
           onDownloadSample={handleDownloadSample}
           onReset={handleResetData}
           isDarkMode={isDarkMode}
@@ -123,21 +154,20 @@ const App: React.FC = () => {
           isSaved={isSaved}
         />
 
-        <main className="flex-grow container mx-auto px-4 py-8 relative z-10">
-          <div className="no-print">
-            {activeTab === 'list' && <ListView members={members} onSelect={setSelectedMember} />}
-            {activeTab === 'tree' && <TreeView members={members} onSelect={setSelectedMember} onAddChild={handleAddMember} />}
-            {activeTab === 'history' && <ClanHistory biography={clanBio} onUpdate={setClanBio} />}
-          </div>
-
-          <div className="hidden print-only">
-            <div className="text-center mb-16 border-b-8 border-double border-black pb-8">
-              <h1 className="text-6xl font-display font-bold uppercase">Gia Phả Dòng Họ</h1>
-            </div>
-            <ClanHistory biography={clanBio} onUpdate={() => {}} />
-            <ListView members={members} onSelect={() => {}} />
-          </div>
+        <main className="flex-grow container mx-auto px-4 py-8 relative z-10 no-print">
+          {activeTab === 'list' && <ListView members={members} onSelect={setSelectedMember} isDarkMode={isDarkMode} />}
+          {activeTab === 'tree' && <TreeView members={members} onSelect={setSelectedMember} onAddChild={handleAddMember} isDarkMode={isDarkMode} />}
+          {activeTab === 'history' && <ClanHistory biography={clanBio} onUpdate={setClanBio} isDarkMode={isDarkMode} />}
         </main>
+
+        <PrintTemplate members={members} biography={clanBio} customTitle={printTitle} />
+
+        {isPrintModalOpen && (
+          <PrintModal 
+            onClose={() => setIsPrintModalOpen(false)} 
+            onConfirm={handleConfirmPrint} 
+          />
+        )}
 
         {(selectedMember || isAddingMode) && (
           <DetailsModal 

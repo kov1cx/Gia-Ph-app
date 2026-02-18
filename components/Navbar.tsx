@@ -101,7 +101,7 @@ const Navbar: React.FC<NavbarProps> = ({
             </button>
           </div>
           
-          <button onClick={onExport} className="px-6 py-2.5 bg-amber-700 text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-xl shadow-amber-900/20 active:scale-95 transition-all">Xuất PDF</button>
+          <button onClick={onExport} className="px-6 py-2.5 bg-amber-700 text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-xl shadow-amber-900/20 active:scale-95 transition-all">Xuất file in</button>
         </div>
       </div>
     </nav>

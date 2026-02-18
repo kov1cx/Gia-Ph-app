@@ -13,24 +13,44 @@
             --bg-page: #050505;
             --glass-bg: rgba(15, 15, 18, 0.8);
             --glass-border: rgba(245, 158, 11, 0.15);
+            --text-main: #f3f4f6;
+            --text-dim: rgba(243, 244, 246, 0.6);
+            --text-highlight: #f59e0b;
             --gold: #f59e0b;
             --gold-bright: #fbbf24;
             --gold-dark: #b45309;
+            --card-bg: rgba(10, 10, 12, 0.6);
         }
+
+        body.light-mode {
+            --bg-page: #f8f5ee; /* Beige mịn hơn */
+            --glass-bg: rgba(255, 255, 255, 0.55);
+            --glass-border: rgba(139, 69, 19, 0.15);
+            --text-main: #2d1e1e; /* Nâu đen sang trọng */
+            --text-dim: #5d4037;
+            --text-highlight: #8b0000; /* Đỏ đô cổ điển cho điểm nhấn */
+            --card-bg: rgba(255, 255, 255, 0.5);
+        }
+
         body {
             font-family: 'Inter', sans-serif;
             margin: 0;
             padding: 0;
             background-color: var(--bg-page);
-            color: #f3f4f6;
+            color: var(--text-main);
             overflow-x: hidden;
+            transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1), color 0.5s ease;
         }
+
         .font-display { font-family: 'Playfair Display', serif; }
+        
         .glass {
             background: var(--glass-bg);
-            backdrop-filter: blur(20px);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
             border: 1px solid var(--glass-border);
         }
+
         .glow-orb {
             position: fixed;
             border-radius: 50%;
@@ -38,27 +58,84 @@
             z-index: -1;
             pointer-events: none;
             opacity: 0.4;
+            transition: background-color 0.8s ease, opacity 0.8s ease;
         }
+
+        /* Overrides cho chế độ Beige */
+        .light-mode .text-white { color: #2d1e1e !important; }
+        .light-mode .text-slate-100 { color: #1a0f0f !important; }
+        .light-mode .text-slate-200 { color: #3e2723 !important; }
+        .light-mode .text-slate-300 { color: #4e342e !important; }
+        .light-mode .text-amber-500 { color: #8b4513 !important; }
+        .light-mode .text-amber-200 { color: #800000 !important; } /* Làm nổi bật màu khác đi */
+        .light-mode .bg-black\/40 { background-color: rgba(255, 255, 255, 0.35) !important; }
+        .light-mode .bg-black\/80 { background-color: rgba(248, 245, 238, 0.85) !important; }
+        .light-mode .bg-black\/90 { background-color: rgba(248, 245, 238, 0.92) !important; }
+        .light-mode .bg-amber-600\/20 { background-color: rgba(139, 69, 19, 0.08) !important; }
+        .light-mode .bg-amber-500\/5 { background-color: rgba(139, 69, 19, 0.05) !important; }
+        .light-mode .border-amber-500\/10 { border-color: rgba(139, 69, 19, 0.1) !important; }
+
         @media print {
+            @page {
+                size: A4 portrait;
+                margin: 15mm;
+            }
             .no-print { display: none !important; }
-            body { background: white; color: black; }
+            .print-only { display: block !important; }
+            
+            body { 
+                background: white !important; 
+                color: black !important;
+                padding: 0;
+                margin: 0;
+            }
+
+            .page-break {
+                page-break-after: always;
+                break-after: page;
+            }
+
+            .print-container {
+                width: 100%;
+                background: white;
+            }
+
+            .family-box {
+                border: 1px solid #ddd;
+                padding: 20px;
+                margin-bottom: 30px;
+                page-break-inside: avoid;
+            }
         }
+        
+        .print-only { display: none; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-20px) scale(1.05); }
+        }
+        .animate-float { animation: float 15s ease-in-out infinite; }
+
+        @keyframes breathe {
+            0%, 100% { opacity: 0.08; transform: scale(1); }
+            50% { opacity: 0.15; transform: scale(1.1); }
+        }
+        .animate-breathe { animation: breathe 8s ease-in-out infinite; }
     </style>
 <script type="importmap">
 {
   "imports": {
-    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.4",
-    "vite": "https://esm.sh/vite@^7.3.1",
-    "react/": "https://esm.sh/react@^19.2.4/",
     "react": "https://esm.sh/react@^19.2.4",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.4/"
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "vite": "https://esm.sh/vite@^7.3.1",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.4"
   }
 }
 </script>
 </head>
 <body>
     <div id="root"></div>
-    <!-- Vite sẽ tự động tìm nạp và biên dịch file này -->
     <script type="module" src="/index.tsx"></script>
 </body>
 </html>
