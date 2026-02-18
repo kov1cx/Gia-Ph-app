@@ -8,8 +8,8 @@ import DetailsModal from './components/DetailsModal';
 import ClanHistory from './components/ClanHistory';
 import { FamilyMember, TabType } from './types';
 
-const STORAGE_KEY = 'gen_heritage_data';
-const BIO_KEY = 'gen_heritage_bio';
+const STORAGE_KEY = 'gen_heritage_data_v1.5';
+const BIO_KEY = 'gen_heritage_bio_v1.5';
 
 const App: React.FC = () => {
   const [isIntro, setIsIntro] = useState(true);
@@ -56,17 +56,6 @@ const App: React.FC = () => {
     }
   }, [clanBio]);
 
-  useEffect(() => {
-    const body = document.body;
-    if (isDarkMode) {
-      body.classList.remove('light-mode');
-      body.style.backgroundColor = '#050505';
-    } else {
-      body.classList.add('light-mode');
-      body.style.backgroundColor = '#fdfbf7';
-    }
-  }, [isDarkMode]);
-
   const handleAddMember = (parentId: string | null = null) => {
     setAddingParentId(parentId);
     setIsAddingMode(true);
@@ -91,6 +80,14 @@ const App: React.FC = () => {
     }
   };
 
+  const handleResetData = () => {
+    if (confirm("CẢNH BÁO: Hành động này sẽ xóa toàn bộ dữ liệu gia phả hiện có. Bạn có chắc chắn muốn làm mới hoàn toàn không?")) {
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(BIO_KEY);
+      window.location.reload();
+    }
+  };
+
   const handleDownloadSample = () => {
     const XLSX = (window as any).XLSX;
     if (!XLSX) return;
@@ -102,14 +99,14 @@ const App: React.FC = () => {
     const ws = XLSX.utils.aoa_to_sheet(data);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "GiaPha");
-    XLSX.writeFile(wb, "Mau_Gia_Pha_So.xlsx");
+    XLSX.writeFile(wb, "Mau_Gia_Pha_So_v1.5.xlsx");
   };
 
   return (
     <div className="min-h-screen flex flex-col relative overflow-hidden bg-[#050505]">
       {isIntro && <Splash onEnter={() => setIsIntro(false)} />}
 
-      <div className={`flex flex-col min-h-screen transition-all duration-1000 ${isIntro ? 'opacity-0 scale-95 blur-xl' : 'opacity-100 scale-100 blur-0'}`}>
+      <div className={`flex flex-col min-h-screen transition-all duration-1000 cubic-bezier(0.4, 0, 0.2, 1) ${isIntro ? 'opacity-0 scale-95 blur-2xl translate-y-20' : 'opacity-100 scale-100 blur-0 translate-y-0'}`}>
         <div className="glow-orb top-[-10%] left-[-5%] w-[60%] h-[60%] bg-amber-600/10 animate-float" />
         <div className="glow-orb bottom-[-10%] right-[-5%] w-[60%] h-[60%] bg-orange-900/10 animate-float" style={{ animationDelay: '-7s' }} />
 
@@ -120,6 +117,7 @@ const App: React.FC = () => {
           onAddMember={() => handleAddMember(null)}
           onExport={() => window.print()}
           onDownloadSample={handleDownloadSample}
+          onReset={handleResetData}
           isDarkMode={isDarkMode}
           toggleTheme={() => setIsDarkMode(!isDarkMode)}
           isSaved={isSaved}
@@ -160,8 +158,10 @@ const App: React.FC = () => {
           />
         )}
 
-        <footer className="no-print py-10 text-center opacity-30 text-[9px] uppercase tracking-[0.6em] font-black">
-          GenHeritage • Royal Legacy Edition • v1.4
+        <footer className="no-print py-10 flex flex-col items-center gap-2 opacity-30">
+          <p className="text-[9px] uppercase tracking-[0.6em] font-black">GenHeritage • Heritage Release • v1.5</p>
+          <div className="h-[1px] w-12 bg-amber-500/20"></div>
+          <p className="text-[7px] uppercase tracking-[0.3em]">Tự hào cội nguồn Việt Nam</p>
         </footer>
       </div>
     </div>
