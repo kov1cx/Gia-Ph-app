@@ -62,7 +62,10 @@ const Navbar: React.FC<NavbarProps> = ({
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5S19.832 5.477 21 6.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
           </div>
           <div>
-            <h1 className="text-xl font-black font-display tracking-tight uppercase text-amber-500">Gia Phả Số</h1>
+            <div className="flex items-center gap-2">
+              <h1 className="text-xl font-black font-display tracking-tight uppercase text-amber-500">Gia Phả Số</h1>
+              <span className="px-2 py-0.5 rounded bg-amber-600/10 border border-amber-500/20 text-[8px] font-black text-amber-500 uppercase tracking-widest">v1.5 Final</span>
+            </div>
             <div className="flex items-center gap-1.5">
               <div className={`w-1 h-1 rounded-full ${isSaved ? 'bg-amber-400' : 'bg-red-500 animate-pulse'}`}></div>
               <span className="text-[8px] font-black uppercase tracking-[0.2em] opacity-40">{isSaved ? 'Hệ thống đã lưu' : 'Đang cập nhật...'}</span>
@@ -91,7 +94,7 @@ const Navbar: React.FC<NavbarProps> = ({
           
           <div className="h-8 w-px bg-amber-500/10 mx-1"></div>
 
-          <button onClick={toggleTheme} className="p-2.5 glass rounded-xl border border-amber-500/10 text-amber-500">{isDarkMode ? '🌙' : '☀️'}</button>
+          <button onClick={toggleTheme} className="p-2.5 glass rounded-xl border border-amber-500/10 text-amber-500 shadow-sm">{isDarkMode ? '🌙' : '☀️'}</button>
           
           <input type="file" ref={fileInputRef} onChange={handleFile} className="hidden" accept=".xlsx,.xls" />
           <div className="flex items-center gap-0.5">

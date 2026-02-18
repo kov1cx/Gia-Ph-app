@@ -138,8 +138,8 @@ const App: React.FC = () => {
       {isIntro && <Splash onEnter={() => setIsIntro(false)} />}
 
       <div className={`flex flex-col min-h-screen transition-all duration-1000 cubic-bezier(0.4, 0, 0.2, 1) ${isIntro ? 'opacity-0 scale-95 blur-2xl translate-y-20' : 'opacity-100 scale-100 blur-0 translate-y-0'}`}>
-        <div className={`glow-orb top-[-10%] left-[-5%] w-[60%] h-[60%] animate-float ${isDarkMode ? 'bg-amber-600/10' : 'bg-amber-400/20'}`} />
-        <div className={`glow-orb bottom-[-10%] right-[-5%] w-[60%] h-[60%] animate-float ${isDarkMode ? 'bg-orange-900/10' : 'bg-amber-200/20'}`} style={{ animationDelay: '-7s' }} />
+        <div className={`glow-orb top-[-10%] left-[-5%] w-[60%] h-[60%] animate-float ${isDarkMode ? 'bg-amber-600/10' : 'bg-[#7c2d12]/15'}`} />
+        <div className={`glow-orb bottom-[-10%] right-[-5%] w-[60%] h-[60%] animate-float ${isDarkMode ? 'bg-orange-900/10' : 'bg-amber-100/20'}`} style={{ animationDelay: '-7s' }} />
 
         <Navbar 
           activeTab={activeTab} 
@@ -188,10 +188,13 @@ const App: React.FC = () => {
           />
         )}
 
-        <footer className="no-print py-10 flex flex-col items-center gap-2 opacity-30">
-          <p className="text-[9px] uppercase tracking-[0.6em] font-black">GenHeritage • Heritage Release • v1.5</p>
-          <div className="h-[1px] w-12 bg-amber-500/20"></div>
-          <p className="text-[7px] uppercase tracking-[0.3em]">Tự hào cội nguồn Việt Nam</p>
+        <footer className="no-print py-12 flex flex-col items-center gap-3 opacity-40">
+          <div className="flex items-center gap-4">
+             <div className="h-[1px] w-8 bg-amber-500/20"></div>
+             <p className="text-[9px] uppercase tracking-[0.6em] font-black text-amber-500">Official Heritage Release • v1.5 Final</p>
+             <div className="h-[1px] w-8 bg-amber-500/20"></div>
+          </div>
+          <p className="text-[7px] uppercase tracking-[0.4em] font-bold">Lưu giữ ngàn đời — Tự hào dòng tộc Việt Nam</p>
         </footer>
       </div>
     </div>

@@ -2,7 +2,7 @@
 {
   "name": "gia-pha-so",
   "version": "1.5.0",
-  "description": "Ứng dụng quản lý gia phả kỹ thuật số chuyên nghiệp",
+  "description": "Hệ thống quản lý gia phả kỹ thuật số vĩnh viễn",
   "main": "main.js",
   "scripts": {
     "dev": "concurrently \"vite\" \"wait-on http://localhost:5173 && electron .\"",
@@ -11,7 +11,7 @@
     "dist": "npm run build && electron-builder",
     "postinstall": "electron-builder install-app-deps"
   },
-  "author": "Heritage Team",
+  "author": "Heritage Digital Team",
   "license": "ISC",
   "dependencies": {
     "react": "^19.0.0",
@@ -30,13 +30,24 @@
   },
   "build": {
     "appId": "com.heritage.giaphaso",
-    "productName": "GiaPhaSo",
+    "productName": "GiaPhaSo_v1.5_Final",
+    "copyright": "Copyright © 2024 Heritage Team",
     "directories": {
       "output": "dist_electron"
     },
     "win": {
-      "target": "portable",
-      "icon": "icon.ico"
+      "target": [
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ],
+      "requestedExecutionLevel": "asInvoker"
+    },
+    "nsis": {
+      "oneClick": true,
+      "allowToChangeInstallationDirectory": false,
+      "createDesktopShortcut": true
     },
     "files": [
       "dist/**/*",
